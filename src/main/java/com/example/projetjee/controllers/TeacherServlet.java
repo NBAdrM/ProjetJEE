@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
+import com.example.projetjee.models.Teacher;
+
 public class TeacherServlet {
     private static final long serialVersionUID = 1L;
     /*
@@ -27,7 +29,7 @@ public class TeacherServlet {
         int id =-1; //Initialize the id to -1 to avoid null pointer exception, it will be updated after the insertion in the database
 
         //Check if one field is empty
-        if (lastName == null || lastName.isEmpty() || firstName == null || firstName.isEmpty() || email == null || email.isEmpty() || address == null || address.isEmpty() || username == null || username.isEmpty() || password == null || password.isEmpty() || report == null || report.isEmpty()) {
+        if (lastName == null || lastName.isEmpty() || firstName == null || firstName.isEmpty() || email == null || email.isEmpty() || address == null || address.isEmpty() || username == null || username.isEmpty() || password == null || password.isEmpty()) {
             request.setAttribute("error", "All fields are required");
             request.getRequestDispatcher("/teacherForm.jsp").forward(request, response);
         }
@@ -35,10 +37,10 @@ public class TeacherServlet {
         //TODO : Make code when Adrien will have finished the database class
 
         //Create a teacher object
-        Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password);
+        //Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password);
 
         //Give the teacher object to the jsp page
-        request.setAttribute("teacher", teacher);
+        //request.setAttribute("teacher", teacher);
         request.setAttribute("success", "Teacher created successfully");
         request.getRequestDispatcher("/home").forward(request, response);
     }
