@@ -43,6 +43,9 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    /*
+     * This method will be called when a admin wants to delete a user
+     */
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
         verifyId(id);
@@ -52,6 +55,14 @@ public class AdminServlet extends HttpServlet {
         request.getRequestDispatcher("/admin.jsp").forward(request, response);
     }
 
+    /*
+        * This method will dispatch to the correct page for the correct role (student or teacher)
+        * Also, it will add the id to the request
+        *
+        * @param String role : The role of the user (student or teacher)
+        * @param String id : The id of the user
+        *
+     */
     private void dispatchRole(HttpServletRequest request, HttpServletResponse response, String role, String id) throws ServletException, IOException {
 
         if (role == null || role.isEmpty()) {
@@ -72,6 +83,11 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    /*
+     * This method will verify if the id is not null or empty
+     *
+     * @param String id : The id to verify
+     */
     private void verifyId(String id) throws ServletException {
         if (id == null || id.isEmpty()) {
             throw new ServletException("Id is required");
