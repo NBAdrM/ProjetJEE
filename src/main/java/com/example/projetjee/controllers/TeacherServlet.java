@@ -1,4 +1,5 @@
 package com.example.projetjee.controllers;
+import com.example.projetjee.utils.UserGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,17 +23,19 @@ public class TeacherServlet {
         String firstName = request.getParameter("firstName");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
-        //TODO : generate a username from the first name and last name
-        String username = request.getParameter("username");
-        //TODO : generate a password
-        String password = request.getParameter("password");
         int id =-1; //Initialize the id to -1 to avoid null pointer exception, it will be updated after the insertion in the database
 
         //Check if one field is empty
-        if (lastName == null || lastName.isEmpty() || firstName == null || firstName.isEmpty() || email == null || email.isEmpty() || address == null || address.isEmpty() || username == null || username.isEmpty() || password == null || password.isEmpty()) {
+        if (lastName == null || lastName.isEmpty() || firstName == null || firstName.isEmpty() || email == null || email.isEmpty() || address == null || address.isEmpty()) {
             request.setAttribute("error", "All fields are required");
             request.getRequestDispatcher("/teacherForm.jsp").forward(request, response);
+            return;
         }
+
+        //Generate Username and password
+        String username = UserGenerator.generateUsername(firstName, lastName);
+        String password = UserGenerator.generatePassword();
+
         //Insert data into the database
         //TODO : Make code when Adrien will have finished the database class
 
