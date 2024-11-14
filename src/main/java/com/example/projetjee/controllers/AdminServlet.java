@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -16,6 +15,7 @@ public class AdminServlet extends HttpServlet {
 
     /*
      * This method will redirect to the correct action (create, delete or modify)
+     * and to the correct role (student or teacher)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -26,45 +26,42 @@ public class AdminServlet extends HttpServlet {
             throw new ServletException("Action is required");
         }
 
+        //Redirect to the correct action
         switch (action) {
             case "create":
-                createUser(request, response, role);
-                break;
-            case "delete":
-                deleteUser(request, response);
+                dispatchRole(request, response, role, String.valueOf(-1)); //Set id to -1 to avoid null pointer exception and to indicate that it's a creation
                 break;
             case "modify":
-                modifyUser(request, response, id);
+                verifyId(id);
+                dispatchRole(request, response, role, id);
+                break;
+            case "delete" :
+                doDelete(request, response); //Redirect to the doDelete method because HTML doesn't support DELETE method
                 break;
             default:
                 throw new ServletException("Invalid action");
         }
     }
 
-    /*
-     * This method will be called to delete a user
-     */
-    private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
+        verifyId(id);
 
-        if (id == null || id.isEmpty()) {
-            request.setAttribute("error", "Id is required");
-            request.getRequestDispatcher("/admin.jsp").forward(request, response);
-            return;
-        }
         //TODO : Make code when Adrien will have finished the database class
+        request.setAttribute("success", "User deleted successfully");
+        request.getRequestDispatcher("/admin.jsp").forward(request, response);
     }
 
-    /*
-     * This method will be called to create a user and will redirect to the correct form
-     */
-    private void createUser(HttpServletRequest request, HttpServletResponse response, String role) throws ServletException, IOException {
-        //Check if one field is empty
+    private void dispatchRole(HttpServletRequest request, HttpServletResponse response, String role, String id) throws ServletException, IOException {
+
         if (role == null || role.isEmpty()) {
             request.setAttribute("error", "All fields are required");
             request.getRequestDispatcher("/admin.jsp").forward(request, response);
             return;
         }
+
+        //Add id to the request
+        request.setAttribute("id", id);
 
         if (role.equals("student")) {
             request.getRequestDispatcher("/studentForm.jsp").forward(request, response);
@@ -75,17 +72,9 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
-    /*
-     * This method will be called to modify a user
-     */
-    private void modifyUser(HttpServletRequest request, HttpServletResponse response, String id) throws ServletException, IOException {
-
+    private void verifyId(String id) throws ServletException {
         if (id == null || id.isEmpty()) {
-            request.setAttribute("error", "Id is required");
-            request.getRequestDispatcher("/admin.jsp").forward(request, response);
-            return;
+            throw new ServletException("Id is required");
         }
-
-        //TODO : Make code when Adrien will have finished the database class
     }
 }
