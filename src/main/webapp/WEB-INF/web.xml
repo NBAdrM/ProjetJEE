@@ -9,6 +9,17 @@
         <welcome-file>home.jsp</welcome-file>
     </welcome-file-list>
 
+    <!-- AdminServlet -->
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>com.example.projetjee.controllers.AdminServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/adminServlet</url-pattern>
+    </servlet-mapping>
+
     <!-- AuthServlet -->
     <servlet>
         <servlet-name>AuthServlet</servlet-name>
