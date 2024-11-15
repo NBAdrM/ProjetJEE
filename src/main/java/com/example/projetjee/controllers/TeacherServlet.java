@@ -13,10 +13,11 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 import com.example.projetjee.models.Teacher;
 
-public class TeacherServlet {
+public class TeacherServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
     /*
-     * This method will be called when a admin will submit the form
+     * This method will be called when an admin will submit the form
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String lastName = request.getParameter("lastName");
@@ -33,7 +34,12 @@ public class TeacherServlet {
         }
 
         //Generate Username and password
-        String username = UserGenerator.generateUsername(firstName, lastName);
+        try {
+            String username = UserGenerator.generateUsername(firstName, lastName);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         String password = UserGenerator.generatePassword();
 
         //Insert data into the database
