@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Student Form</h1>
-<form action="StudentServlet" method="post">
+<form action="${pageContext.request.contextPath}/student" method="post">
   <input type="hidden" name="id" value="${id}">
   <label>Nom:</label>
   <input type="text" name="name" required><br>

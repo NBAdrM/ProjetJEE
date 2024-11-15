@@ -21,7 +21,6 @@ public class AdminServlet extends HttpServlet {
         String action = request.getParameter("action");
         String role = request.getParameter("role");
         String id = request.getParameter("id");
-
         if (action == null || action.isEmpty()) {
             throw new ServletException("Action is required");
         }
@@ -75,9 +74,9 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("id", id);
 
         if (role.equals("student")) {
-            request.getRequestDispatcher("/studentForm.jsp").forward(request, response);
+            request.getRequestDispatcher("../student/studentForm.jsp").forward(request, response);
         } else if (role.equals("teacher")) {
-            request.getRequestDispatcher("/teacherForm.jsp").forward(request, response);
+            request.getRequestDispatcher("../teacher/teacherForm.jsp").forward(request, response);
         } else {
             throw new ServletException("Invalid role");
         }
