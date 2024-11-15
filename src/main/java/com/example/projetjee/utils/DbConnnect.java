@@ -9,7 +9,7 @@ public class DbConnnect {
     private static final String USER = "root";
     private static final String PASSWORD = "cytech0001";
 
-    public static Connection initializeDatabase() throws SQLException, ClassNotFoundException {
+    private static Connection initializeDatabase() throws SQLException, ClassNotFoundException {
         // Charge le driver JDBC
         Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -17,7 +17,7 @@ public class DbConnnect {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public static int addStudent(String firstName, String lastName, String email, String adress, String username, String password) throws SQLException, ClassNotFoundException {
+    public static int addPerson(String firstName, String lastName, String email, String adress, String username, String password) throws SQLException, ClassNotFoundException {
         String hashedPassword = hashPassword(password);
         Connection conn = initializeDatabase();
 
@@ -44,9 +44,19 @@ public class DbConnnect {
         }
 
         stmt.close();
+        conn.close();
 
-        query = "INSERT INTO Student (id) VALUES (?)";
-        stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        return generatedId;
+    }
+
+    public static int addStudent(String firstName, String lastName, String email, String adress, String username, String password) throws SQLException, ClassNotFoundException {
+
+        int generatedId = addPerson(firstName,lastName,email,adress,username,password);
+
+        Connection conn = initializeDatabase();
+
+        String query = "INSERT INTO Student (id) VALUES (?)";
+        PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
         stmt.setInt(1, generatedId);
 
@@ -56,13 +66,69 @@ public class DbConnnect {
         return generatedId;
     }
 
+    public static int addTeacher(String firstName, String lastName, String email, String adress, String username, String password) throws SQLException, ClassNotFoundException {
+
+        int generatedId = addPerson(firstName,lastName,email,adress,username,password);
+
+        Connection conn = initializeDatabase();
+
+        String query = "INSERT INTO Teacher (id) VALUES (?)";
+        PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        stmt.setInt(1, generatedId);
+
+        stmt.close();
+        conn.close();
+
+        return generatedId;
+    }
+
+    public static int addAdmin(String firstName, String lastName, String email, String adress, String username, String password) throws SQLException, ClassNotFoundException {
+
+        int generatedId = addPerson(firstName,lastName,email,adress,username,password);
+
+        Connection conn = initializeDatabase();
+
+        String query = "INSERT INTO Admin (id) VALUES (?)";
+        PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        stmt.setInt(1, generatedId);
+
+        stmt.close();
+        conn.close();
+
+        return generatedId;
+    }
+
+
     private static String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
-    public static boolean checkPassword(String plaintextPassword, String hashedPassword) {
+    private static boolean checkNoneHashedPassword(String plaintextPassword, String hashedPassword) {
         return BCrypt.checkpw(plaintextPassword, hashedPassword);
     }
+
+    public static boolean checkPassword(int id,String password) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+        String query = "SELECT password FROM Person WHERE id = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            String hashedPassword = rs.getString("password");
+            rs.close();
+            stmt.close();
+            conn.close();
+            return checkNoneHashedPassword(password,hashedPassword);
+        }
+        rs.close();
+        stmt.close();
+        conn.close();
+        return false;
+    }
+
+
 
     public static boolean alreadyExisteUsername(String username) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
