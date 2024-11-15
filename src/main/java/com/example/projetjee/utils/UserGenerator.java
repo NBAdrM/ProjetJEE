@@ -1,4 +1,5 @@
 package com.example.projetjee.utils;
+import java.sql.SQLException;
 import java.util.Random;
 
 public class UserGenerator {
@@ -11,15 +12,14 @@ public class UserGenerator {
      * @param lastName : the last name of the user
      * @return the generated username as a string
      */
-    public static String generateUsername(String firstName, String lastName) {
+    public static String generateUsername(String firstName, String lastName) throws SQLException, ClassNotFoundException {
         // Concatenate the first letter of the first name with the last name
         String baseUsername = firstName.toLowerCase().charAt(0) + "." + lastName.toLowerCase();
         String username = baseUsername;
 
         int i = 1;
         // Check if the username already exists
-        //TODO : Change usernameExists when Adrien push
-        while (usernameExists(username)) {
+        while (DbConnnect.alreadyExisteUsername(username)) {
             username = baseUsername + i;
             i++;
         }
