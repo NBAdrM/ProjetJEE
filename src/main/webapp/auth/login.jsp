@@ -6,7 +6,7 @@
     <title>Page de connexion</title>
 
 
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/Login.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/login.css">
 </head>
 <body>
 
