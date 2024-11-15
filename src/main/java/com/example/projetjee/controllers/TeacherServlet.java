@@ -33,24 +33,22 @@ public class TeacherServlet extends HttpServlet {
             return;
         }
 
-        //Generate Username and password
         try {
+            //Generate Username and password and insert into the database
             String username = UserGenerator.generateUsername(firstName, lastName);
+            String password = UserGenerator.generatePassword();
+
+            //Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password, report);
+
+            //DbConnnect.addTeacher(teacher.getfirstName,teacher.getlastName,teacher.getEmail,teacher.getAddress,teacher.getUsername,teacher.getPassword,teacher.getReport);
+
+            //Give the teacher object to the jsp page
+            //request.setAttribute("teacher", teacher);
+            request.setAttribute("success", "Teacher created successfully");
+            request.getRequestDispatcher("/home").forward(request, response);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        String password = UserGenerator.generatePassword();
-
-        //Insert data into the database
-        //TODO : Make code when Adrien will have finished the database class
-
-        //Create a teacher object
-        //Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password);
-
-        //Give the teacher object to the jsp page
-        //request.setAttribute("teacher", teacher);
-        request.setAttribute("success", "Teacher created successfully");
-        request.getRequestDispatcher("/home").forward(request, response);
     }
 }
