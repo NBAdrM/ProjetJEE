@@ -1,20 +1,40 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
   <title>Student Form</title>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/studentForm.css">
 </head>
 <body>
-<h1>Student Form</h1>
-<form action="${pageContext.request.contextPath}/student" method="post">
-  <input type="hidden" name="id" value="${id}">
-  <label>Nom:</label>
-  <input type="text" name="name" required><br>
-  <label>Age:</label>
-  <input type="number" name="age" required><br>
-  <label>Classe:</label>
-  <input type="text" name="class" required><br>
+<h2>Enregistrer un nouveau étudiant</h2>
+
+<!-- Display error or success messages -->
+<c:if test="${not empty error}">
+  <div style="color: red;">${error}</div>
+</c:if>
+<c:if test="${not empty success}">
+  <div style="color: green;">${success}</div>
+</c:if>
+
+<form action="StudentServlet" method="post">
+  <label for="lastName">Nom de famille:</label><br>
+  <input type="text" id="lastName" name="lastName" required><br><br>
+
+  <label for="firstName">Prénom:</label><br>
+  <input type="text" id="firstName" name="firstName" required><br><br>
+
+  <label for="email">Email:</label><br>
+  <input type="email" id="email" name="email" required><br><br>
+
+  <label for="address">Adresse:</label><br>
+  <input type="text" id="address" name="address" required><br><br>
+
+  <label for="report">Rapport:</label><br>
+  <textarea id="report" name="report" required></textarea><br><br>
+
   <input type="submit" value="Soumettre">
 </form>
+
+<a href="home.jsp">Retour accueil</a>
 </body>
 </html>

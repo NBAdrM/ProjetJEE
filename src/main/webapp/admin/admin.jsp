@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Administration Panel</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/admin.css">
 </head>
 <body>
 <h1>Administration Panel</h1>
