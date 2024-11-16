@@ -4,6 +4,25 @@
 <head>
     <title>Administration Panel</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/admin.css">
+    <style>
+        .a {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-weight: bold;
+            color: #333333;
+            text-decoration: none;
+            background-color: #ffffff;
+            padding: 5px 10px;
+            border: 1px solid #333333;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+        .a:hover {
+            background-color: #5982C2;
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
 <h1>Administration Panel</h1>
@@ -42,6 +61,9 @@
 
     <input type="submit" value="Soumettre">
 </form>
+
+<!-- Bouton de retour à l'accueil -->
+<a href="home.jsp" class="a">Retour à l'accueil</a>
 
 <!-- Script pour montrer ou cacher le champ ID selon l'action choisie -->
 <script>

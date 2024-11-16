@@ -4,7 +4,40 @@
 <head>
   <title>Student Form</title>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/studentForm.css">
+  <!-- Ajout du style pour le bouton et le rectangle du rapport (je n'arrive pas a le placer dans le css et à le faire apparaitre-->
+  <style>
+    .a {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-weight: bold;
+      color: #333333;
+      text-decoration: none;
+      background-color: #ffffff;
+      padding: 5px 10px;
+      border: 1px solid #333333;
+      border-radius: 4px;
+      z-index: 1000;
+    }
+    .a:hover {
+      background-color: #5982C2;
+      color: #ffffff;
+    }
+    form textarea {
+      width: 100%;
+      height: 150px;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+      resize: none;
+    }
+  </style>
 </head>
+
+
 <body>
 <h2>Enregistrer un nouveau étudiant</h2>
 
@@ -35,6 +68,6 @@
   <input type="submit" value="Soumettre">
 </form>
 
-<a href="home.jsp">Retour accueil</a>
+<a href="home.jsp" class="a">Retour accueil</a>
 </body>
 </html>

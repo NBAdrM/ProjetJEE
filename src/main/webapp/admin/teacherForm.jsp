@@ -4,6 +4,26 @@
 <head>
   <title>Teacher Form</title>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/teacherForm.css">
+  <!-- Ajout du style pour le bouton (je n'arrive pas a le placer dans le css et à le faire apparaitre-->
+  <style>
+    .a {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-weight: bold;
+      color: #333333;
+      text-decoration: none;
+      background-color: #ffffff;
+      padding: 5px 10px;
+      border: 1px solid #333333;
+      border-radius: 4px;
+      z-index: 1000;
+    }
+    .a:hover {
+      background-color: #5982C2;
+      color: #ffffff;
+    }
+  </style>
 </head>
 <body>
 <h2>Enregistrer un nouveau professeur</h2>
