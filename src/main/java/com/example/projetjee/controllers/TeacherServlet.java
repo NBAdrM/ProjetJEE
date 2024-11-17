@@ -1,4 +1,5 @@
 package com.example.projetjee.controllers;
+import com.example.projetjee.utils.DbConnnect;
 import com.example.projetjee.utils.UserGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import com.example.projetjee.models.Teacher;
+import com.example.projetjee.utils.DbConnnect;
 
 public class TeacherServlet extends HttpServlet {
 
@@ -50,5 +52,24 @@ public class TeacherServlet extends HttpServlet {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+
+        if (id == null || id.isEmpty()) {
+            request.setAttribute("error", "ID is required");
+            request.getRequestDispatcher("/teacherForm.jsp").forward(request, response);
+            return;
+        }
+
+        if (id.equals("-1")) {
+            //Get all teacher in database
+            //DbConnnect.getTeacher()
+
+        }else {
+            //DbConnect.getTeacher(id)
+        }
+
     }
 }
