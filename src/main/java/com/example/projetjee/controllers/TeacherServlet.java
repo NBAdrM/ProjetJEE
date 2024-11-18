@@ -1,4 +1,5 @@
 package com.example.projetjee.controllers;
+import com.example.projetjee.utils.DbConnnect;
 import com.example.projetjee.utils.UserGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import com.example.projetjee.models.Teacher;
+import com.example.projetjee.utils.DbConnnect;
 
 public class TeacherServlet extends HttpServlet {
 
@@ -33,24 +35,41 @@ public class TeacherServlet extends HttpServlet {
             return;
         }
 
-        //Generate Username and password
         try {
+            //Generate Username and password and insert into the database
             String username = UserGenerator.generateUsername(firstName, lastName);
+            String password = UserGenerator.generatePassword();
+
+            //Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password, report);
+
+            //DbConnnect.addTeacher(teacher.getfirstName,teacher.getlastName,teacher.getEmail,teacher.getAddress,teacher.getUsername,teacher.getPassword,teacher.getReport);
+
+            //Give the teacher object to the jsp page
+            //request.setAttribute("teacher", teacher);
+            request.setAttribute("success", "Teacher created successfully");
+            request.getRequestDispatcher("/home").forward(request, response);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        String password = UserGenerator.generatePassword();
+    }
 
-        //Insert data into the database
-        //TODO : Make code when Adrien will have finished the database class
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
 
-        //Create a teacher object
-        //Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password);
+        if (id == null || id.isEmpty()) {
+            request.setAttribute("error", "ID is required");
+            request.getRequestDispatcher("/teacherForm.jsp").forward(request, response);
+            return;
+        }
 
-        //Give the teacher object to the jsp page
-        //request.setAttribute("teacher", teacher);
-        request.setAttribute("success", "Teacher created successfully");
-        request.getRequestDispatcher("/home").forward(request, response);
+        if (id.equals("-1")) {
+            //Get all teacher in database
+            //DbConnnect.getTeacher()
+
+        }else {
+            //DbConnect.getTeacher(id)
+        }
+
     }
 }
