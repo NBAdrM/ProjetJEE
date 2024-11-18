@@ -66,6 +66,24 @@ public class DbConnnect {
         return generatedId;
     }
 
+    public static int addStudent(String firstName, String lastName, String email, String adress, String username, String password, String report) throws SQLException, ClassNotFoundException {
+
+        int generatedId = addPerson(firstName,lastName,email,adress,username,password);
+
+        Connection conn = initializeDatabase();
+
+        String query = "INSERT INTO Student (id,report) VALUES (?,?)";
+        PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        stmt.setInt(1, generatedId);
+        stmt.setString(2, report);
+
+        stmt.close();
+        conn.close();
+
+        return generatedId;
+    }
+
     public static int addTeacher(String firstName, String lastName, String email, String adress, String username, String password) throws SQLException, ClassNotFoundException {
 
         int generatedId = addPerson(firstName,lastName,email,adress,username,password);
@@ -128,8 +146,6 @@ public class DbConnnect {
         return false;
     }
 
-
-
     public static boolean alreadyExisteUsername(String username) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 
@@ -141,8 +157,29 @@ public class DbConnnect {
         ResultSet rs = stmt.executeQuery();
 
         if (rs.next()) {
-            return rs.getInt(1) > 0;
+            boolean out = rs.getInt(1) > 0;
+            rs.close();
+            stmt.close();
+            conn.close();
+            return out;
         }
+        rs.close();
+        stmt.close();
+        conn.close();
         return false;
+    }
+
+    public static void addReportStudent(int id,String report) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "UPDATE Student SET report = ? WHERE id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setString(1, report);
+        stmt.setInt(2,id);
+
+        stmt.close();
+        conn.close();
     }
 }
