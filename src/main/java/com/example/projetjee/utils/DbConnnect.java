@@ -192,7 +192,7 @@ public class DbConnnect {
 
         stmt.setString(1, report);
         stmt.setInt(2,id);
-
+        stmt.executeQuery();
         stmt.close();
         conn.close();
     }
@@ -211,7 +211,7 @@ public class DbConnnect {
         stmt.setBoolean(5, active);
         stmt.setString(6, report);
         stmt.setInt(7,id);
-
+        stmt.executeQuery();
         stmt.close();
         conn.close();
     }
@@ -225,7 +225,7 @@ public class DbConnnect {
 
         stmt.setBoolean(1, false);
         stmt.setInt(2,id);
-
+        stmt.executeQuery();
         stmt.close();
         conn.close();
     }
