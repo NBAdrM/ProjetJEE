@@ -60,6 +60,8 @@ public class DbConnnect {
 
         stmt.setInt(1, generatedId);
 
+        stmt.executeUpdate();
+
         stmt.close();
         conn.close();
 
@@ -78,6 +80,8 @@ public class DbConnnect {
         stmt.setInt(1, generatedId);
         stmt.setString(2, report);
 
+        stmt.executeUpdate();
+
         stmt.close();
         conn.close();
 
@@ -95,6 +99,8 @@ public class DbConnnect {
 
         stmt.setInt(1, generatedId);
 
+        stmt.executeUpdate();
+
         stmt.close();
         conn.close();
 
@@ -111,6 +117,8 @@ public class DbConnnect {
         PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
         stmt.setInt(1, generatedId);
+
+        stmt.executeUpdate();
 
         stmt.close();
         conn.close();
@@ -181,5 +189,15 @@ public class DbConnnect {
 
         stmt.close();
         conn.close();
+    }
+
+    public static void main(String[] args){
+        try {
+            addStudent("adrien","maestri","lala@gmail.com","43 la","a","a");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
