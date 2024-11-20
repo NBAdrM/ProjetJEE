@@ -11,4 +11,26 @@ public class AuthServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.getWriter().println("Authentification réussie !");
     }
+
+    @RestController
+    @RequestMapping("/auth")
+    public class AuthController {
+
+    @Autowired
+    private AuthService authService;
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+        String token = authService.authenticate(loginRequest);
+        return ResponseEntity.ok(token);
+    }
+
+    @GetMapping("/roles")
+    public ResponseEntity<String> getUserRoles(@RequestParam String token) {
+        String roles = authService.getRolesByToken(token);
+        return ResponseEntity.ok(roles);
+    }
+}
+
+    
 }
