@@ -5,23 +5,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.logging.Logger;
+
 
 public class AdminServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(StudentServlet.class.getName());
 
     /*
      * This method will redirect to the correct action (create, delete or modify)
      * and to the correct role (student or teacher)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        logger.info("Start student servlet");
         String action = request.getParameter("action");
         String role = request.getParameter("role");
         String id = request.getParameter("id");
+
+        logger.info("request get \naction: " + action + "\nrole: " + role + "\nid: " + id);
+
         if (action == null || action.isEmpty()) {
+            logger.warning("action is null or empty");
             throw new ServletException("Action is required");
         }
 
@@ -38,14 +43,16 @@ public class AdminServlet extends HttpServlet {
                 doDelete(request, response); //Redirect to the doDelete method because HTML doesn't support DELETE method
                 break;
             default:
+                logger.warning("unknown action: " + action);
                 throw new ServletException("Invalid action");
         }
     }
 
     /*
-     * This method will be called when a admin wants to delete a user
+     * This method will be called when an admin wants to delete a user
      */
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.info("Start delete");
         String id = request.getParameter("id");
         verifyId(id);
 
@@ -63,12 +70,7 @@ public class AdminServlet extends HttpServlet {
         *
      */
     private void dispatchRole(HttpServletRequest request, HttpServletResponse response, String role, String id) throws ServletException, IOException {
-
-        if (role == null || role.isEmpty()) {
-            request.setAttribute("error", "All fields are required");
-            request.getRequestDispatcher("/admin.jsp").forward(request, response);
-            return;
-        }
+        logger.info("Start dispatch role");
 
         //Add id to the request
         request.setAttribute("id", id);
@@ -78,6 +80,7 @@ public class AdminServlet extends HttpServlet {
         } else if (role.equals("teacher")) {
             request.getRequestDispatcher("/admin/teacherForm.jsp").forward(request, response);
         } else {
+            logger.warning("unknown role: " + role);
             throw new ServletException("Invalid role");
         }
     }
@@ -89,6 +92,7 @@ public class AdminServlet extends HttpServlet {
      */
     private void verifyId(String id) throws ServletException {
         if (id == null || id.isEmpty()) {
+            logger.warning("id is null or empty");
             throw new ServletException("Id is required");
         }
     }
