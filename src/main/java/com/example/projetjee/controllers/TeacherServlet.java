@@ -18,7 +18,7 @@ public class TeacherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(TeacherServlet.class.getName());
     /*
-     * This method will be called when an admin will submit the form
+     * This method will be called when an admin will submit the form to create a teacher
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Start TeacherServlet");
@@ -48,8 +48,12 @@ public class TeacherServlet extends HttpServlet {
             logger.info(teacher.toString());
 
             logger.info("Adding student to database");
-            DbConnnect.addTeacher(teacher.getFirstName(),teacher.getLastName(),teacher.getEmail(),teacher.getAddress(),teacher.getUsername(),teacher.getPassword());
+            id = DbConnnect.addTeacher(teacher.getFirstName(),teacher.getLastName(),teacher.getEmail(),teacher.getAddress(),teacher.getUsername(),teacher.getPassword());
             logger.info("successfully added student to the database");
+
+            //Update the id of the teacher
+            logger.info("Update ID of the teacher");
+            teacher.setId(id);
 
             //Give the teacher object to the jsp page
             request.setAttribute("teacher", teacher);
@@ -61,6 +65,11 @@ public class TeacherServlet extends HttpServlet {
         }
     }
 
+    /*
+     * This method will be called when we want to get info from one or multiple teachers
+     * If the id is -1, we will get all the teachers
+     * If the id is a number, we will get the teacher with this id
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
 
@@ -74,9 +83,12 @@ public class TeacherServlet extends HttpServlet {
         if (id.equals("-1")) {
             //Get all teacher in database
             //DbConnnect.getTeacher()
+            int i = 0;
 
         }else {
+            //Get the teacher with the id
             //DbConnect.getTeacher(id)
+            int i = 1;
         }
 
     }

@@ -50,8 +50,12 @@ public class StudentServlet extends HttpServlet {
 
             //TODO : Mettre à jour addStudent pour inclure le report
             logger.info("Adding student to database");
-            //DbConnnect.addStudent(student.getFirstName(),student.getLastName(),student.getEmail(),student.getAddress(),student.getUsername(),student.getPassword(), student.getReport());
+            id = DbConnnect.addStudent(student.getFirstName(),student.getLastName(),student.getEmail(),student.getAddress(),student.getUsername(),student.getPassword(), student.getReport());
             logger.info("successfully added student to the database");
+
+            //Update the id of the student
+            logger.info("Update ID of the student");
+            student.setId(id);
 
             //Give the student object to the jsp page
             request.setAttribute("student", student);
