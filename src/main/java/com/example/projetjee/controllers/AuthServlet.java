@@ -37,11 +37,12 @@ public class AuthServlet extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("userId", userId);
                     session.setAttribute("username", username);
+                    session.setAttribute("role", DbConnnect.getRoleById(userId));
                     logger.info("Session created for user: " + username);
 
                     // Setting the response
                     response.setStatus(HttpServletResponse.SC_OK);
-                    response.getWriter().println("Authentification réussie !");
+                    response.sendRedirect("/ProjetJEE_war_exploded/home.jsp");
                 } else {
                     logger.info("Password NOT OK");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

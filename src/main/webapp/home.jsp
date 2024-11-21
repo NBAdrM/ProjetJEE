@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     // Vérifiez si une session existe
-    HttpSession session = request.getSession(false);
     if (session == null || session.getAttribute("username") == null) {
-        response.sendRedirect("login.jsp");
+        response.sendRedirect("auth/login.jsp");
         return;
     }
 
@@ -17,7 +16,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
+    <meta c harset="UTF-8">
     <title>Accueil</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/home.css">
 </head>

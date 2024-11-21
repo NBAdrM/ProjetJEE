@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.projetjee.models.Person;
 import com.example.projetjee.models.Student;
 import com.example.projetjee.models.Teacher;
 import org.mindrot.jbcrypt.BCrypt;
@@ -35,7 +36,7 @@ public class DbConnnect {
         stmt.setString(4, adress);
         stmt.setString(5, username);
         stmt.setString(6, hashedPassword);
-        stmt.setBoolean(6, active);
+        stmt.setBoolean(7, active);
 
         int rowsAffected = stmt.executeUpdate();
 
@@ -334,5 +335,67 @@ public class DbConnnect {
         return userId;
     }
 
+    public static String getRoleById(int id) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String role = null;
+
+        try {
+            // Vérifier si la personne est active
+            String personQuery = "SELECT active FROM Person WHERE id = ?";
+            PreparedStatement personStmt = conn.prepareStatement(personQuery);
+            personStmt.setInt(1, id);
+
+            ResultSet personRs = personStmt.executeQuery();
+
+            if (personRs.next() && personRs.getBoolean("active")) {
+                // Vérifier si c'est un étudiant
+                String studentQuery = "SELECT report FROM Student WHERE id = ?";
+                PreparedStatement studentStmt = conn.prepareStatement(studentQuery);
+                studentStmt.setInt(1, id);
+
+                ResultSet studentRs = studentStmt.executeQuery();
+
+                if (studentRs.next()) {
+                    role = "student";
+                } else {
+                    // Vérifier si c'est un enseignant
+                    String teacherQuery = "SELECT id FROM Teacher WHERE id = ?";
+                    PreparedStatement teacherStmt = conn.prepareStatement(teacherQuery);
+                    teacherStmt.setInt(1, id);
+
+                    ResultSet teacherRs = teacherStmt.executeQuery();
+
+                    if (teacherRs.next()) {
+                        role = "teacher";
+                    } else {
+                        // Vérifier si c'est un administrateur
+                        String adminQuery = "SELECT iid FROM Admin WHERE iid = ?";
+                        PreparedStatement adminStmt = conn.prepareStatement(adminQuery);
+                        adminStmt.setInt(1, id);
+
+                        ResultSet adminRs = adminStmt.executeQuery();
+
+                        if (adminRs.next()) {
+                            role = "admin";
+                        }
+                        adminRs.close();
+                        adminStmt.close();
+                    }
+                    teacherRs.close();
+                    teacherStmt.close();
+                }
+                studentRs.close();
+                studentStmt.close();
+            }
+
+            personRs.close();
+            personStmt.close();
+        } finally {
+            conn.close();
+        }
+
+        return role;
+    }
 
 }
