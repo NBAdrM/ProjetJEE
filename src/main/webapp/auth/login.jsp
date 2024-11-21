@@ -1,11 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    // Check if there is already a session
+    HttpSession session = request.getSession(false);
+    if (session != null && session.getAttribute("username") != null) {
+        response.sendRedirect("home.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Page de connexion</title>
-
-
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/login.css">
 </head>
 <body>
@@ -25,7 +31,7 @@
 </form>
 
 <%
-    // Affichage d'un message d'erreur si l'authentification échoue
+    // Display a message if auth failed
     String message = (String) request.getAttribute("message");
     if (message != null) {
 %>
@@ -33,5 +39,6 @@
 <%
     }
 %>
+
 </body>
 </html>
