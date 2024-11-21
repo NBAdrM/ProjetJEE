@@ -1,4 +1,7 @@
 package com.example.projetjee.controllers;
+import com.example.projetjee.models.Person;
+import com.example.projetjee.models.Student;
+import com.example.projetjee.models.Teacher;
 import com.example.projetjee.utils.DbConnnect;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -6,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -61,18 +66,29 @@ public class AdminServlet extends HttpServlet {
             throw new ServletException("Role is required");
         }
 
+
         switch (role){
             case "student":
+                List<Student> listStudent;
                 logger.info("Get students");
-                list = DbConnnect.getStudents();
-                logger.info("students list : " + list);
-                request.setAttribute("list", list);
+                try {
+                    listStudent = DbConnnect.getStudents();
+                } catch (SQLException | ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                logger.info("students list : " + listStudent);
+                request.setAttribute("list", listStudent);
                 break;
             case "teacher":
+                List<Teacher> listTeacher;
                 logger.info("Get teachers");
-                list = DbConnnect.getTeachers();
-                logger.info("teachers list : " + list);
-                request.setAttribute("list", list);
+                try {
+                    listTeacher = DbConnnect.getTeachers();
+                } catch (SQLException | ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                logger.info("teachers list : " + listTeacher);
+                request.setAttribute("list", listTeacher);
                 break;
             default:
                 logger.warning("unknown role: " + role);
@@ -89,7 +105,7 @@ public class AdminServlet extends HttpServlet {
         String id = request.getParameter("id");
         verifyId(id);
 
-        DbConnnect.deleteUser(id);
+        //DbConnnect.deleteUser(id);
         request.setAttribute("success", "User deleted successfully");
         request.getRequestDispatcher("/admin.jsp").forward(request, response);
     }
