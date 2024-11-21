@@ -1,4 +1,5 @@
 package com.example.projetjee.controllers;
+import com.example.projetjee.utils.DbConnnect;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,6 +48,38 @@ public class AdminServlet extends HttpServlet {
                 throw new ServletException("Invalid action");
         }
     }
+    /*
+        * This method will be called when an admin wants to get the list of student or teacher
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.info("Start get");
+        String role = request.getParameter("role");
+        logger.info("request get \nrole: " + role);
+
+        if (role == null || role.isEmpty()) {
+            logger.warning("role is null or empty");
+            throw new ServletException("Role is required");
+        }
+
+        switch (role){
+            case "student":
+                logger.info("Get students");
+                list = DbConnnect.getStudents();
+                logger.info("students list : " + list);
+                request.setAttribute("list", list);
+                break;
+            case "teacher":
+                logger.info("Get teachers");
+                list = DbConnnect.getTeachers();
+                logger.info("teachers list : " + list);
+                request.setAttribute("list", list);
+                break;
+            default:
+                logger.warning("unknown role: " + role);
+                throw new ServletException("Invalid role");
+        }
+
+    }
 
     /*
      * This method will be called when an admin wants to delete a user
@@ -56,7 +89,7 @@ public class AdminServlet extends HttpServlet {
         String id = request.getParameter("id");
         verifyId(id);
 
-        //TODO : Make code when Adrien will have finished the database class
+        DbConnnect.deleteUser(id);
         request.setAttribute("success", "User deleted successfully");
         request.getRequestDispatcher("/admin.jsp").forward(request, response);
     }

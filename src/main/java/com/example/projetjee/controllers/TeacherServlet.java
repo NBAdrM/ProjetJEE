@@ -47,18 +47,19 @@ public class TeacherServlet extends HttpServlet {
             Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password, true);
             logger.info(teacher.toString());
 
-            logger.info("Adding student to database");
+            logger.info("Adding teacher to database");
             id = DbConnnect.addTeacher(teacher.getFirstName(),teacher.getLastName(),teacher.getEmail(),teacher.getAddress(),teacher.getUsername(),teacher.getPassword());
-            logger.info("successfully added student to the database");
+            logger.info("successfully added teacher to the database");
 
             //Update the id of the teacher
-            logger.info("Update ID of the teacher");
+            logger.info("Update ID of the teacher, id :" + id);
             teacher.setId(id);
 
             //Give the teacher object to the jsp page
             request.setAttribute("teacher", teacher);
             request.setAttribute("success", "Teacher created successfully");
-            request.getRequestDispatcher("/home").forward(request, response);
+            logger.info("Redirect to home");
+            request.getRequestDispatcher("/home.jsp").forward(request, response);
         } catch (SQLException | ClassNotFoundException e) {
             logger.severe("SQL Error: " + e.getMessage());
             throw new RuntimeException(e);

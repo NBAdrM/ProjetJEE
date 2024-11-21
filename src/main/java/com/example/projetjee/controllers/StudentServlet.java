@@ -48,18 +48,19 @@ public class StudentServlet extends HttpServlet {
             Student student = new Student(id, lastName, firstName, email, address, username, password, true, report);
             logger.info(student.toString());
 
-            //TODO : Mettre à jour addStudent pour inclure le report
+            //TODO : Mettre à jour addStudent pour inclure active
             logger.info("Adding student to database");
             id = DbConnnect.addStudent(student.getFirstName(),student.getLastName(),student.getEmail(),student.getAddress(),student.getUsername(),student.getPassword(), student.getReport());
             logger.info("successfully added student to the database");
 
             //Update the id of the student
-            logger.info("Update ID of the student");
+            logger.info("Update ID of the student, id :" + id );
             student.setId(id);
 
             //Give the student object to the jsp page
             request.setAttribute("student", student);
             request.setAttribute("success", "Student created successfully");
+            logger.info("Redirecting to home.jsp");
             request.getRequestDispatcher("/home.jsp").forward(request, response);
 
         } catch (SQLException | ClassNotFoundException e) {
