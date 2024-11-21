@@ -1,30 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.example.projetjee.models.Student, com.example.projetjee.models.Teacher" %>
 <%
+    // Vérifiez si une session existe
+    HttpSession session = request.getSession(false);
+    if (session == null || session.getAttribute("username") == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+
+    // Récupérez les attributs de session
+    String username = (String) session.getAttribute("username");
     String role = (String) session.getAttribute("role");
-    Object user = request.getAttribute("user");
 
-    if (role == null || user == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
-    String firstName = "";
-    String lastName = "";
-
-    if ("student".equals(role) && user instanceof Student) {
-        Student student = (Student) user;
-        firstName = student.getFirstName();
-        lastName = student.getLastName();
-    } else if ("teacher".equals(role) && user instanceof Teacher) {
-        Teacher teacher = (Teacher) user;
-        firstName = teacher.getFirstName();
-        lastName = teacher.getLastName();
-    } else {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
+    // Définissez une classe CSS en fonction du rôle
     String roleClass = "student".equals(role) ? "background-student" : "background-teacher";
 %>
 <!DOCTYPE html>
@@ -38,7 +25,7 @@
 <h1 class="header">Bienvenue sur CY Note</h1>
 
 <div class="content">
-    <h2>Bienvenue, <%= firstName %> <%= lastName %>!</h2>
+    <h2>Bienvenue, <%= username %>!</h2>
     <p>Choisissez une des options ci-dessous :</p>
 
     <div class="button-container">
@@ -49,6 +36,12 @@
         <a href="teacherGrades.jsp" class="button">Gérer les notes des étudiants</a>
         <a href="teacherSchedule.jsp" class="button">Consulter mon emploi du temps</a>
         <% } %>
+    </div>
+
+    <div class="logout">
+        <form action="${pageContext.request.contextPath}/logoutServlet" method="post">
+            <button type="submit">Se déconnecter</button>
+        </form>
     </div>
 </div>
 </body>
