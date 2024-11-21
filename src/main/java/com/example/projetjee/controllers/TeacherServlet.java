@@ -42,13 +42,14 @@ public class TeacherServlet extends HttpServlet {
             logger.info("Generating username and password");
             String username = UserGenerator.generateUsername(firstName, lastName);
             String password = UserGenerator.generatePassword();
+            logger.info("Generated username: " + username + " and password: " + password);
 
             logger.info("Generating teacher instance");
-            Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password, true);
+            Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password,Boolean.TRUE);
             logger.info(teacher.toString());
 
             logger.info("Adding teacher to database");
-            id = DbConnnect.addTeacher(teacher.getFirstName(),teacher.getLastName(),teacher.getEmail(),teacher.getAddress(),teacher.getUsername(),teacher.getPassword());
+            id = DbConnnect.addTeacher(teacher.getFirstName(),teacher.getLastName(),teacher.getEmail(),teacher.getAddress(),teacher.getUsername(),teacher.getPassword(),Boolean.TRUE);
             logger.info("successfully added teacher to the database");
 
             //Update the id of the teacher
