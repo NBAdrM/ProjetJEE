@@ -42,24 +42,25 @@ public class StudentServlet extends HttpServlet {
             logger.info("Generating username and password");
             String username = UserGenerator.generateUsername(firstName, lastName);
             String password = UserGenerator.generatePassword();
+            logger.info("Generated username: " + username + " and password: " + password);
 
 
             logger.info("Generating student instance");
-            Student student = new Student(id, lastName, firstName, email, address, username, password, true, report);
+            Student student = new Student(id, lastName, firstName, email, address, username, password, Boolean.TRUE, report);
             logger.info(student.toString());
 
-            //TODO : Mettre à jour addStudent pour inclure le report
             logger.info("Adding student to database");
-            id = DbConnnect.addStudent(student.getFirstName(),student.getLastName(),student.getEmail(),student.getAddress(),student.getUsername(),student.getPassword(), student.getReport());
+            id = DbConnnect.addStudent(student.getFirstName(),student.getLastName(),student.getEmail(),student.getAddress(),student.getUsername(),student.getPassword(), Boolean.TRUE,student.getReport());
             logger.info("successfully added student to the database");
 
             //Update the id of the student
-            logger.info("Update ID of the student");
+            logger.info("Update ID of the student, id :" + id );
             student.setId(id);
 
             //Give the student object to the jsp page
             request.setAttribute("student", student);
             request.setAttribute("success", "Student created successfully");
+            logger.info("Redirecting to home.jsp");
             request.getRequestDispatcher("/home.jsp").forward(request, response);
 
         } catch (SQLException | ClassNotFoundException e) {
