@@ -313,4 +313,26 @@ public class DbConnnect {
         return null;
     }
 
+    public static Integer getUserIdByUsername(String username) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT id FROM Person WHERE username = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
+
+        Integer userId = null;
+        if (rs.next()) {
+            userId = rs.getInt("id");
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return userId;
+    }
+
+
 }
