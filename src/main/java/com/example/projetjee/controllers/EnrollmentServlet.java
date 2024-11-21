@@ -1,29 +1,24 @@
 package com.example.projetjee.controllers;
-import java.util.List;
 
+import com.example.projetjee.models.Course;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class EnrollmentServlet {
-    @RestController
-    @RequestMapping("/enrollments")
-    public class EnrollmentController {
+import java.io.IOException;
+import java.util.List;
 
-    @Autowired
-    private EnrollmentService enrollmentService;
+import com.example.projetjee.models.Course;
 
-    @PostMapping("/enroll")
-    public ResponseEntity<Enrollment> enrollStudent(@RequestBody Enrollment enrollment) {
-        Enrollment newEnrollment = enrollmentService.enrollStudent(enrollment);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newEnrollment);
+public class EnrollmentServlet extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Gérer l'inscription d'un étudiant à un cours
     }
 
-    @GetMapping("/student/{studentId}")
-    public List<Course> getCoursesByStudentId(@PathVariable Long studentId) {
-        return enrollmentService.getCoursesByStudentId(studentId);
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     }
-}
-
 }

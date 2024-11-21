@@ -1,42 +1,32 @@
 package com.example.projetjee.controllers;
+
+import com.example.projetjee.models.Course;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@RestController
-@RequestMapping("/courses")
-public class CourseServlet {
+import java.io.IOException;
+import java.util.List;
 
-    @Autowired
-    private CourseService courseService;
+public class CourseServlet extends HttpServlet {
 
-    @GetMapping("/")
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
-        Course course = courseService.getCourseById(id);
-        return ResponseEntity.ok(course);
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Gérer la création d'un cours
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        Course createdCourse = courseService.saveCourse(course);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Gérer la mise à jour d'un cours
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
-        Course updatedCourse = courseService.updateCourse(id, courseDetails);
-        return ResponseEntity.ok(updatedCourse);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourse(id);
-        return ResponseEntity.noContent().build();
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Gérer la suppression d'un cours
     }
 }
