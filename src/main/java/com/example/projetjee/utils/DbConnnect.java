@@ -198,6 +198,24 @@ public class DbConnnect {
         conn.close();
     }
 
+    public static void updateTeacher(int id ,String firstName, String lastName, String email, String adress,Boolean active) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "UPDATE Teacher SET first_name=? , last_name=? , email=? , address=? , active=? WHERE id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setString(1, firstName);
+        stmt.setString(2, lastName);
+        stmt.setString(3, email);
+        stmt.setString(4, adress);
+        stmt.setBoolean(5, active);
+        stmt.setInt(6,id);
+        stmt.executeUpdate();
+        stmt.close();
+        conn.close();
+    }
+
     public static void updateStudent(int id ,String firstName, String lastName, String email, String adress,Boolean active, String report) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 
@@ -212,7 +230,7 @@ public class DbConnnect {
         stmt.setBoolean(5, active);
         stmt.setString(6, report);
         stmt.setInt(7,id);
-        stmt.executeQuery();
+        stmt.executeUpdate();
         stmt.close();
         conn.close();
     }

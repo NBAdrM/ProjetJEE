@@ -20,12 +20,13 @@ public class StudentServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Start student servlet");
+        String id = request.getParameter("id");
         String lastName = request.getParameter("lastName");
         String firstName = request.getParameter("firstName");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         String report = request.getParameter("report");
-        int id =-1; //Initialize the id to -1 to avoid null pointer exception, it will be updated after the insertion in the database
+
         logger.info("request give \nlastName: " + lastName + "\nfirstName: " + firstName + "\nemail: " + email + "\naddress: " + address + "\nreport: " + report);
 
 
@@ -38,29 +39,33 @@ public class StudentServlet extends HttpServlet {
         }
 
         try {
-            //Generate Username and password and insert into the database
-            logger.info("Generating username and password");
-            String username = UserGenerator.generateUsername(firstName, lastName);
-            String password = UserGenerator.generatePassword();
-            logger.info("Generated username: " + username + " and password: " + password);
+            // Vérifier si on est en mode modification
+            if (id != null && !id.isEmpty()) {
+                // Modification d'un étudiant existant
+                int idInt = Integer.parseInt(id);
+                logger.info("Updating student with ID: " + idInt);
 
+                Student student = new Student(idInt, lastName, firstName, email, address, null, null, Boolean.TRUE, report);
+                DbConnnect.updateStudent(student.getId(),student.getFirstName(),student.getLastName(),student.getEmail(),student.getEmail(),Boolean.TRUE,student.getReport()); // Implémente cette méthode pour mettre à jour en base
 
-            logger.info("Generating student instance");
-            Student student = new Student(id, lastName, firstName, email, address, username, password, Boolean.TRUE, report);
-            logger.info(student.toString());
+                request.setAttribute("success", "Student updated successfully");
+            } else {
+                // Création d'un nouvel étudiant
+                logger.info("Creating new student");
 
-            logger.info("Adding student to database");
-            id = DbConnnect.addStudent(student.getFirstName(),student.getLastName(),student.getEmail(),student.getAddress(),student.getUsername(),student.getPassword(), Boolean.TRUE,student.getReport());
-            logger.info("successfully added student to the database");
+                String username = UserGenerator.generateUsername(firstName, lastName);
+                String password = UserGenerator.generatePassword();
+                logger.info("Generated username: " + username + " and password: " + password);
 
-            //Update the id of the student
-            logger.info("Update ID of the student, id :" + id );
-            student.setId(id);
+                Student student = new Student(-1, lastName, firstName, email, address, username, password, Boolean.TRUE, report);
+                int newId = DbConnnect.addStudent(student.getFirstName(), student.getLastName(), student.getEmail(), student.getAddress(),
+                        student.getUsername(), student.getPassword(), Boolean.TRUE, student.getReport());
+                student.setId(newId);
 
-            //Give the student object to the jsp page
-            request.setAttribute("student", student);
-            request.setAttribute("success", "Student created successfully");
-            logger.info("Redirecting to admin.jsp");
+                request.setAttribute("success", "Student created successfully");
+            }
+
+            // Rediriger vers la page admin
             request.getRequestDispatcher("/admin/admin.jsp").forward(request, response);
 
         } catch (SQLException | ClassNotFoundException e) {

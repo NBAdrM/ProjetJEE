@@ -1,4 +1,5 @@
 package com.example.projetjee.controllers;
+import com.example.projetjee.models.Student;
 import com.example.projetjee.utils.DbConnnect;
 import com.example.projetjee.utils.UserGenerator;
 import jakarta.servlet.ServletException;
@@ -22,11 +23,12 @@ public class TeacherServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Start TeacherServlet");
+        String id = request.getParameter("id");
         String lastName = request.getParameter("lastName");
         String firstName = request.getParameter("firstName");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
-        int id =-1; //Initialize the id to -1 to avoid null pointer exception, it will be updated after the insertion in the database
+
         logger.info("request give \nlastName: " + lastName + "\nfirstName: " + firstName + "\nemail: " + email + "\naddress: " + address);
 
         //Check if one field is empty
@@ -38,29 +40,39 @@ public class TeacherServlet extends HttpServlet {
         }
 
         try {
-            //Generate Username and password and insert into the database
-            logger.info("Generating username and password");
-            String username = UserGenerator.generateUsername(firstName, lastName);
-            String password = UserGenerator.generatePassword();
-            logger.info("Generated username: " + username + " and password: " + password);
+            // Vérifier si on est en mode modification
+            if (id != null && !id.isEmpty()) {
+                // Modification d'un étudiant existant
+                int idInt = Integer.parseInt(id);
+                logger.info("Updating student with ID: " + idInt);
 
-            logger.info("Generating teacher instance");
-            Teacher teacher = new Teacher(id, lastName, firstName, email, address, username, password,Boolean.TRUE);
-            logger.info(teacher.toString());
+                Teacher teacher = new Teacher(idInt, lastName, firstName, email, address, null, null, Boolean.TRUE);
+                DbConnnect.updateTeacher(teacher.getId(), teacher.getFirstName(), teacher.getLastName(), teacher.getEmail(), teacher.getEmail(), Boolean.TRUE); // Implémente cette méthode pour mettre à jour en base
 
-            logger.info("Adding teacher to database");
-            id = DbConnnect.addTeacher(teacher.getFirstName(),teacher.getLastName(),teacher.getEmail(),teacher.getAddress(),teacher.getUsername(),teacher.getPassword(),Boolean.TRUE);
-            logger.info("successfully added teacher to the database");
+                request.setAttribute("success", "Student updated successfully");
+            }else {
+                // Création d'un nouveau professeur
 
-            //Update the id of the teacher
-            logger.info("Update ID of the teacher, id :" + id);
-            teacher.setId(id);
+                String username = UserGenerator.generateUsername(firstName, lastName);
+                String password = UserGenerator.generatePassword();
+                logger.info("Generated username: " + username + " and password: " + password);
 
-            //Give the teacher object to the jsp page
-            request.setAttribute("teacher", teacher);
-            request.setAttribute("success", "Teacher created successfully");
-            logger.info("Redirect to admin.jsp");
-            request.getRequestDispatcher("/admin/admin.jsp").forward(request, response);
+                logger.info("Generating teacher instance");
+                Teacher teacher = new Teacher(-1, lastName, firstName, email, address, username, password, Boolean.TRUE);
+                logger.info(teacher.toString());
+
+                logger.info("Adding teacher to database");
+                int newId = DbConnnect.addTeacher(teacher.getFirstName(), teacher.getLastName(), teacher.getEmail(), teacher.getAddress(), teacher.getUsername(), teacher.getPassword(), Boolean.TRUE);
+                logger.info("successfully added teacher to the database");
+
+                //Update the id of the teacher
+                logger.info("Update ID of the teacher, id :" + id);
+                teacher.setId(newId);
+
+                request.setAttribute("success", "Teacher created successfully");
+                logger.info("Redirect to admin.jsp");
+                request.getRequestDispatcher("/admin/admin.jsp").forward(request, response);
+            }
         } catch (SQLException | ClassNotFoundException e) {
             logger.severe("SQL Error: " + e.getMessage());
             throw new RuntimeException(e);

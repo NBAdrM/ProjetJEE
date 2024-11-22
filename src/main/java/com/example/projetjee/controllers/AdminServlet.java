@@ -38,20 +38,25 @@ public class AdminServlet extends HttpServlet {
         }
 
         //Redirect to the correct action
-        switch (action) {
-            case "create":
-                dispatchRole(request, response, role, String.valueOf(-1)); //Set id to -1 to avoid null pointer exception and to indicate that it's a creation
-                break;
-            case "modify":
-                verifyId(id);
-                dispatchRole(request, response, role, id);
-                break;
-            case "delete" :
-                doDelete(request, response); //Redirect to the doDelete method because HTML doesn't support DELETE method
-                break;
-            default:
-                logger.warning("unknown action: " + action);
-                throw new ServletException("Invalid action");
+        try {
+            switch (action) {
+                case "create":
+                    dispatchRole(request, response, role, String.valueOf(-1)); //Set id to -1 to avoid null pointer exception and to indicate that it's a creation
+                    break;
+                case "modify":
+                    verifyId(id);
+                    dispatchRole(request, response, role, id);
+                    break;
+                case "delete":
+                    doDelete(request, response); //Redirect to the doDelete method because HTML doesn't support DELETE method
+                    break;
+                default:
+                    logger.warning("unknown action: " + action);
+                    throw new ServletException("Invalid action");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.severe("Error fetching data: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching data");
         }
     }
     /*
@@ -121,15 +126,19 @@ public class AdminServlet extends HttpServlet {
         * @param String id : The id of the user
         *
      */
-    private void dispatchRole(HttpServletRequest request, HttpServletResponse response, String role, String id) throws ServletException, IOException {
+    private void dispatchRole(HttpServletRequest request, HttpServletResponse response, String role, String id) throws ServletException, IOException, SQLException, ClassNotFoundException {
         logger.info("Start dispatch role");
 
         //Add id to the request
         request.setAttribute("id", id);
 
         if (role.equals("student")) {
+            Student student = DbConnnect.getStudent(Integer.parseInt(id));
+            request.setAttribute("student", student);
             request.getRequestDispatcher("/admin/studentForm.jsp").forward(request, response);
         } else if (role.equals("teacher")) {
+            Teacher teacher = DbConnnect.getTeacher(Integer.parseInt(id));
+            request.setAttribute("teacher", teacher);
             request.getRequestDispatcher("/admin/teacherForm.jsp").forward(request, response);
         } else {
             logger.warning("unknown role: " + role);

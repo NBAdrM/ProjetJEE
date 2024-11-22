@@ -7,6 +7,7 @@
 <head>
     <title>Panneau Administration</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/admin.css">
+    <script src="${pageContext.request.contextPath}/ressources/js/admin.js"></script>
 </head>
 <body>
 <h1>Panneau d'administration</h1>
@@ -41,65 +42,5 @@
     <!-- Les lignes seront ajoutées dynamiquement ici -->
     </tbody>
 </table>
-
-<!-- Script pour le filtre -->
-<script>
-    function filterTable() {
-        let filter = document.getElementById("filter").value;
-        let contextPath = '${pageContext.request.contextPath}';
-
-        console.log("Rôle sélectionné : ", filter);
-
-        fetch(contextPath + "/adminServlet?role=" + filter)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Erreur lors de la récupération des données");
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Réinitialiser le tableau
-                var tableBody = document.querySelector("#userTable tbody");
-                tableBody.innerHTML = "";
-
-                // Ajouter les nouvelles lignes
-                data.forEach(user => {
-                    var row = document.createElement("tr");
-                    row.setAttribute("data-role", filter);
-
-                    var lastNameCell = document.createElement("td");
-                    lastNameCell.textContent = user.lastName;
-
-                    var firstNameCell = document.createElement("td");
-                    firstNameCell.textContent = user.firstName;
-
-                    var roleCell = document.createElement("td");
-                    roleCell.textContent = filter === "student" ? "Élève" : "Professeur";
-
-                    console.log("Context", contextPath);
-                    console.log("filter", filter);
-                    console.log("user.id", user.id);
-
-                    var actionsCell = document.createElement("td");
-                    actionsCell.innerHTML = `
-                    <a href="${contextPath}/adminServlet?action=modify&role=${filter}&id=${user.id}" class="button">Modifier</a>
-                    <a href="${contextPath}/adminServlet?action=delete&role=${filter}&id=${user.id}" class="button delete"
-                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
-                    Supprimer </a>
-                `;
-
-                    row.appendChild(lastNameCell);
-                    row.appendChild(firstNameCell);
-                    row.appendChild(roleCell);
-                    row.appendChild(actionsCell);
-
-                    tableBody.appendChild(row);
-                });
-            })
-            .catch(error => {
-                console.error("Erreur:", error);
-            });
-    }
-</script>
 </body>
 </html>
