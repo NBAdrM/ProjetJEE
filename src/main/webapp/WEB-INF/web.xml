@@ -31,6 +31,18 @@
         <url-pattern>/authServlet</url-pattern>
     </servlet-mapping>
 
+    <!-- LogoutServlet -->
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.example.projetjee.controllers.LogoutServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logoutServlet</url-pattern>
+    </servlet-mapping>
+
     <!-- CourseServlet -->
     <servlet>
         <servlet-name>CourseServlet</servlet-name>
