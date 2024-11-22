@@ -1,5 +1,7 @@
 package com.example.projetjee.controllers;
 
+import com.example.projetjee.models.Grade;
+import com.example.projetjee.utils.DbConnnect;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
@@ -14,26 +16,19 @@ public class GradeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String studentId = request.getParameter("studentId");
         String courseId = request.getParameter("courseId");
+        String courseName = request.getParameter("courseName");
         String gradeStr = request.getParameter("grade");
 
         try {
             double grade = Double.parseDouble(gradeStr);
 
-            // Connexion à la base de données
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "password");
+            // Création de l'objet Grade
+            Grade gradeObj = new Grade(studentId, courseId, courseName, grade);
 
-            String query = "INSERT INTO grades (student_id, course_id, grade) VALUES (?, ?, ?)";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, studentId);
-            stmt.setString(2, courseId);
-            stmt.setDouble(3, grade);
+            //DbConnnect.insertGrade(gradeObj);
 
-            stmt.executeUpdate();
-            response.getWriter().println("Note enregistrée avec succès.");
-            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
-            response.getWriter().println("Erreur lors de l'enregistrement de la note.");
         }
     }
 
