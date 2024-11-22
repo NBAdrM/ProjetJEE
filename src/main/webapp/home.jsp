@@ -16,7 +16,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta c harset="UTF-8">
+    <meta charset="UTF-8">
     <title>Accueil</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/home.css">
 </head>
@@ -35,13 +35,15 @@
         <a href="teacherGrades.jsp" class="button">Gérer les notes des étudiants</a>
         <a href="teacherSchedule.jsp" class="button">Consulter mon emploi du temps</a>
         <% } %>
+
+        <div class="logout">
+            <form action="${pageContext.request.contextPath}/logoutServlet" method="post">
+                <button type="submit">Se déconnecter</button>
+            </form>
+        </div>
+
     </div>
 
-    <div class="logout">
-        <form action="${pageContext.request.contextPath}/logoutServlet" method="post">
-            <button type="submit">Se déconnecter</button>
-        </form>
-    </div>
 </div>
 </body>
 </html>

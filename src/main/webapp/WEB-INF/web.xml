@@ -32,7 +32,6 @@
     </servlet-mapping>
 
     <!-- LogoutServlet -->
-
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>com.example.projetjee.controllers.LogoutServlet</servlet-class>
@@ -41,6 +40,16 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/logoutServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- CalendarServlet -->
+    <servlet>
+        <servlet-name>CalendarServlet</servlet-name>
+        <servlet-class>com.example.projetjee.controllers.CalendarServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CalendarServlet</servlet-name>
+        <url-pattern>/calendarServlet</url-pattern>
     </servlet-mapping>
 
     <!-- CourseServlet -->
