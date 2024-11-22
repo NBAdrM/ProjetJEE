@@ -36,7 +36,12 @@ public class AuthServlet extends HttpServlet {
                     session.setAttribute("role", DbConnnect.getRoleById(userId));
                     logger.info("Session created for user: " + username);
 
-                    response.sendRedirect("/ProjetJEE_war_exploded/home.jsp");
+                    if (DbConnnect.getRoleById(userId).equals("admin")) {
+                        logger.info("User is an admin");
+                        response.sendRedirect("/ProjetJEE_war_exploded/admin/admin.jsp");
+                    }else {
+                        response.sendRedirect("/ProjetJEE_war_exploded/home.jsp");
+                    }
                 } else {
                     logger.info("Password NOT OK");
                     request.setAttribute("message", "Identifiant ou mot de passe incorrect !");
