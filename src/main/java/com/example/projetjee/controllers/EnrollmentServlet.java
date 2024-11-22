@@ -1,11 +1,19 @@
 package com.example.projetjee.controllers;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.List;
+
+import com.example.projetjee.models.Course;
 
 public class EnrollmentServlet extends HttpServlet {
 
@@ -31,5 +39,3 @@ public class EnrollmentServlet extends HttpServlet {
             response.getWriter().println("Erreur lors de l'inscription.");
         }
     }
-}
-

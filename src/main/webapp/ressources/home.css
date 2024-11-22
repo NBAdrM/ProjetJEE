@@ -1,0 +1,108 @@
+body {
+    font-family: Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    color: #333;
+}
+
+.background-student {
+    background-color: #5982C2; /* Bleu pour les étudiants */
+}
+
+.background-teacher {
+    background-color: #ff4758; /* Rouge pour les enseignants */
+}
+
+.header {
+    color: white;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 50px;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+.content {
+    margin-top: 120px;
+    text-align: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #333333;
+}
+
+p {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #555555;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.button {
+    display: inline-block;
+    text-decoration: none;
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #5982C2;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: #2e4bb6;
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.logout button {
+    background-color: #ff4758; /* Rouge pour le bouton de déconnexion */
+    color: white;
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none; /* Enlever la bordure par défaut */
+    cursor: pointer; /* Ajouter un curseur pointer pour indiquer que c'est un bouton */
+}
+
+.logout button:hover {
+    background-color: #e0414d; /* Couleur un peu plus foncée au survol */
+    transform: translateY(-2px);
+}
+
+.logout button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

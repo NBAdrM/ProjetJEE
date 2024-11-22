@@ -1,0 +1,48 @@
+/* Style général du body */
+body {
+    font-family: 'Helvetica', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9; /* Couleur de fond claire et apaisante */
+    color: #333;
+}
+
+/* Style de la barre de navigation */
+header nav {
+    background-color: #5982C2; /* Bleu caractéristique */
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 15px;
+    transition: color 0.3s;
+}
+
+header nav a:hover {
+    color: #ffcc00; /* Couleur de survol */
+}
+
+/* Section principale */
+.main-content {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.main-content h1 {
+    font-size: 28px;
+    color: #5982C2;}/* Accentue
+

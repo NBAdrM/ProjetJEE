@@ -1,11 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    // Redirection si l'utilisateur est déjà connecté
+    if (session != null && session.getAttribute("username") != null) {
+        response.sendRedirect("home.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Page de connexion</title>
-
-
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/login.css">
 </head>
 <body>
@@ -24,14 +29,15 @@
     <button type="submit">Se connecter</button>
 </form>
 
+<!-- Affichage conditionnel du message d'erreur -->
 <%
-    // Affichage d'un message d'erreur si l'authentification échoue
     String message = (String) request.getAttribute("message");
     if (message != null) {
 %>
-<p style="color: red;"><%= message %></p>
+<p style="color: red; font-weight: bold; margin-top: 20px;"><%= message %></p>
 <%
     }
 %>
+
 </body>
 </html>
