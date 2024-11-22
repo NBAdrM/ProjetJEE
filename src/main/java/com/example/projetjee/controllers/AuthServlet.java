@@ -22,14 +22,10 @@ public class AuthServlet extends HttpServlet {
         logger.info("Request received: username = " + username);
 
         try {
-            // Check if username exists
-            logger.info("Checking Username");
             if (DbConnnect.alreadyExisteUsername(username)) {
-                // Get User ID
                 int userId = DbConnnect.getUserIdByUsername(username);
                 logger.info("UserID found: " + userId);
 
-                // Check password
                 if (DbConnnect.checkPassword(userId, password)) {
                     logger.info("Password OK");
 
@@ -40,23 +36,22 @@ public class AuthServlet extends HttpServlet {
                     session.setAttribute("role", DbConnnect.getRoleById(userId));
                     logger.info("Session created for user: " + username);
 
-                    // Setting the response
-                    response.setStatus(HttpServletResponse.SC_OK);
                     response.sendRedirect("/ProjetJEE_war_exploded/home.jsp");
                 } else {
                     logger.info("Password NOT OK");
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.getWriter().println("Mot de passe incorrect !");
+                    request.setAttribute("message", "Identifiant ou mot de passe incorrect !");
+                    request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
                 }
             } else {
                 logger.info("Username " + username + " not found");
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().println("Utilisateur non trouvé !");
+                request.setAttribute("message", "Identifiant ou mot de passe incorrect !");
+                request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
             }
         } catch (Exception e) {
             logger.severe("Error: " + e.getMessage());
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Erreur interne du serveur : " + e.getMessage());
+            request.setAttribute("message", "Erreur interne du serveur : " + e.getMessage());
+            request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
         }
     }
 }
+

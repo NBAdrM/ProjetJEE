@@ -314,6 +314,35 @@ public class DbConnnect {
         return null;
     }
 
+    public static Teacher getTeacher(int id) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Teacher AS t INNER JOIN Person AS p ON t.id=p.id WHERE p.id=?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            String firstname = rs.getString("first_name");
+            String lastname = rs.getString("last_name");
+            String email = rs.getString("email");
+            String address = rs.getString("address");
+            String username = rs.getString("username");
+            String password = rs.getString("password");
+            Boolean active = rs.getBoolean("active");
+
+            // Crée une instance de Teacher et la retourne
+            return new Teacher(id, firstname, lastname, email, address, username, password, active);
+        }
+
+        stmt.close();
+        conn.close();
+        return null;
+    }
+
+
     public static Integer getUserIdByUsername(String username) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 
