@@ -49,7 +49,7 @@
   <div style="color: green;">${success}</div>
 </c:if>
 
-<form action="StudentServlet" method="post">
+<form action="${pageContext.request.contextPath}/student" method="post">
   <label for="lastName">Nom de famille:</label><br>
   <input type="text" id="lastName" name="lastName" required><br><br>
 
