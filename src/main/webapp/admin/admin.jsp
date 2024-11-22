@@ -21,7 +21,7 @@
 <div class="filter-container" style="margin-bottom: 20px;">
     <label for="filter">Filtrer par rôle : </label>
     <select id="filter" onchange="filterTable()">
-        <option value="all">Tous</option>
+        <option> </option>
         <option value="student">Élèves</option>
         <option value="teacher">Professeurs</option>
     </select>
@@ -38,73 +38,67 @@
     </tr>
     </thead>
     <tbody>
-    <%
-        // Récupérer les listes d'étudiants et de professeurs depuis l'attribut de requête
-        List<Student> students = (List<Student>) request.getAttribute("list");
-        List<Teacher> teachers = (List<Teacher>) request.getAttribute("list");
-
-        // Si la liste d'étudiants est définie, on l'affiche
-        if (students != null) {
-            for (Student student : students) {
-    %>
-    <tr data-role="student">
-        <td><%= student.getLastName() %></td>
-        <td><%= student.getFirstName() %></td>
-        <td>Élève</td>
-        <td>
-            <a href="<%= request.getContextPath() %>/adminServlet?action=modify&role=student&id=<%= student.getId() %>" class="button">
-                Modifier
-            </a>
-            <a href="<%= request.getContextPath() %>/adminServlet?action=delete&role=student&id=<%= student.getId() %>"
-               class="button delete"
-               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
-                Supprimer
-            </a>
-        </td>
-    </tr>
-    <%
-            }
-        }
-
-        // Si la liste de professeurs est définie, on l'affiche
-        if (teachers != null) {
-            for (Teacher teacher : teachers) {
-    %>
-    <tr data-role="teacher">
-        <td><%= teacher.getLastName() %></td>
-        <td><%= teacher.getFirstName() %></td>
-        <td>Professeur</td>
-        <td>
-            <a href="<%= request.getContextPath() %>/adminServlet?action=modify&role=teacher&id=<%= teacher.getId() %>" class="button">
-                Modifier
-            </a>
-            <a href="<%= request.getContextPath() %>/adminServlet?action=delete&role=teacher&id=<%= teacher.getId() %>"
-               class="button delete"
-               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
-                Supprimer
-            </a>
-        </td>
-    </tr>
-    <%
-            }
-        }
-    %>
+    <!-- Les lignes seront ajoutées dynamiquement ici -->
     </tbody>
 </table>
 
 <!-- Script pour le filtre -->
 <script>
     function filterTable() {
-        var filter = document.getElementById("filter").value;
-        var rows = document.querySelectorAll("#userTable tbody tr");
+        let filter = document.getElementById("filter").value;
+        let contextPath = '${pageContext.request.contextPath}';
 
-        rows.forEach(row => {
-            if (filter === "all" || row.getAttribute("data-role") === filter) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
+        console.log("Rôle sélectionné : ", filter);
+
+        fetch(contextPath + "/adminServlet?role=" + filter)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erreur lors de la récupération des données");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Réinitialiser le tableau
+                var tableBody = document.querySelector("#userTable tbody");
+                tableBody.innerHTML = "";
+
+                // Ajouter les nouvelles lignes
+                data.forEach(user => {
+                    var row = document.createElement("tr");
+                    row.setAttribute("data-role", filter);
+
+                    var lastNameCell = document.createElement("td");
+                    lastNameCell.textContent = user.lastName;
+
+                    var firstNameCell = document.createElement("td");
+                    firstNameCell.textContent = user.firstName;
+
+                    var roleCell = document.createElement("td");
+                    roleCell.textContent = filter === "student" ? "Élève" : "Professeur";
+
+                    console.log("Context", contextPath);
+                    console.log("filter", filter);
+                    console.log("user.id", user.id);
+
+                    var actionsCell = document.createElement("td");
+                    actionsCell.innerHTML = `
+                    <a href="${contextPath}/adminServlet?action=modify&role=${filter}&id=${user.id}" class="button">Modifier</a>
+                    <a href="${contextPath}/adminServlet?action=delete&role=${filter}&id=${user.id}" class="button delete"
+                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                    Supprimer </a>
+                `;
+
+                    row.appendChild(lastNameCell);
+                    row.appendChild(firstNameCell);
+                    row.appendChild(roleCell);
+                    row.appendChild(actionsCell);
+
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error("Erreur:", error);
+            });
     }
 </script>
 </body>

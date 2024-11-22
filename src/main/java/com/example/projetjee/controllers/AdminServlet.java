@@ -3,6 +3,7 @@ import com.example.projetjee.models.Person;
 import com.example.projetjee.models.Student;
 import com.example.projetjee.models.Teacher;
 import com.example.projetjee.utils.DbConnnect;
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,6 +59,8 @@ public class AdminServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Start get");
+        logger.info("Request URI: " + request.getRequestURI());
+        logger.info("Query String: " + request.getQueryString());
         String role = request.getParameter("role");
         logger.info("request get \nrole: " + role);
 
@@ -66,36 +69,36 @@ public class AdminServlet extends HttpServlet {
             throw new ServletException("Role is required");
         }
 
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
 
-        switch (role){
-            case "student":
-                List<Student> listStudent;
-                logger.info("Get students");
-                try {
-                    listStudent = DbConnnect.getStudents();
-                } catch (SQLException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                logger.info("students list : " + listStudent);
-                request.setAttribute("list", listStudent);
-                break;
-            case "teacher":
-                List<Teacher> listTeacher;
-                logger.info("Get teachers");
-                try {
-                    listTeacher = DbConnnect.getTeachers();
-                } catch (SQLException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                logger.info("teachers list : " + listTeacher);
-                request.setAttribute("list", listTeacher);
-                break;
-            default:
-                logger.warning("unknown role: " + role);
-                throw new ServletException("Invalid role");
+        try {
+            switch (role) {
+                case "student":
+                    List<Student> students = DbConnnect.getStudents();
+                    logger.info("Students list: " + students);
+                    String studentJson = gson.toJson(students);
+                    response.getWriter().write(studentJson);
+                    break;
+
+                case "teacher":
+                    List<Teacher> teachers = DbConnnect.getTeachers();
+                    logger.info("Teachers list: " + teachers);
+                    String teacherJson = gson.toJson(teachers);
+                    response.getWriter().write(teacherJson);
+                    break;
+
+                default:
+                    logger.warning("Unknown role: " + role);
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid role");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.severe("Error fetching data: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching data");
         }
-
     }
+
 
     /*
      * This method will be called when an admin wants to delete a user

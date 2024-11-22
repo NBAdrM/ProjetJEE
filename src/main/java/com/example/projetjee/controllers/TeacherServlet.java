@@ -59,8 +59,8 @@ public class TeacherServlet extends HttpServlet {
             //Give the teacher object to the jsp page
             request.setAttribute("teacher", teacher);
             request.setAttribute("success", "Teacher created successfully");
-            logger.info("Redirect to home");
-            request.getRequestDispatcher("/home.jsp").forward(request, response);
+            logger.info("Redirect to admin.jsp");
+            request.getRequestDispatcher("/admin/admin.jsp").forward(request, response);
         } catch (SQLException | ClassNotFoundException e) {
             logger.severe("SQL Error: " + e.getMessage());
             throw new RuntimeException(e);
