@@ -83,3 +83,26 @@ p {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+.logout button {
+    background-color: #ff4758; /* Rouge pour le bouton de déconnexion */
+    color: white;
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none; /* Enlever la bordure par défaut */
+    cursor: pointer; /* Ajouter un curseur pointer pour indiquer que c'est un bouton */
+}
+
+.logout button:hover {
+    background-color: #e0414d; /* Couleur un peu plus foncée au survol */
+    transform: translateY(-2px);
+}
+
+.logout button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
