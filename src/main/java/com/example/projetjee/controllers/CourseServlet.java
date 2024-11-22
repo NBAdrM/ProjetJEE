@@ -1,42 +1,60 @@
 package com.example.projetjee.controllers;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
-@RestController
-@RequestMapping("/courses")
-public class CourseServlet {
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-    @Autowired
-    private CourseService courseService;
+public class CourseServlet extends HttpServlet {
 
-    @GetMapping("/")
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // Connexion à la base de données
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "password");
+
+            String query = "SELECT * FROM courses";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            response.setContentType("text/html");
+            response.getWriter().println("<h1>Liste des cours</h1><ul>");
+
+            while (rs.next()) {
+                String courseName = rs.getString("name");
+                response.getWriter().println("<li>" + courseName + "</li>");
+            }
+
+            response.getWriter().println("</ul>");
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.getWriter().println("Erreur lors de la récupération des cours.");
+        }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
-        Course course = courseService.getCourseById(id);
-        return ResponseEntity.ok(course);
-    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String courseName = request.getParameter("name");
 
-    @PostMapping("/create")
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        Course createdCourse = courseService.saveCourse(course);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
-    }
+        try {
+            // Connexion à la base de données
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "password");
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
-        Course updatedCourse = courseService.updateCourse(id, courseDetails);
-        return ResponseEntity.ok(updatedCourse);
-    }
+            String query = "INSERT INTO courses (name) VALUES (?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, courseName);
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourse(id);
-        return ResponseEntity.noContent().build();
+            stmt.executeUpdate();
+            response.getWriter().println("Cours ajouté avec succès.");
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.getWriter().println("Erreur lors de l'ajout du cours.");
+        }
     }
 }
+

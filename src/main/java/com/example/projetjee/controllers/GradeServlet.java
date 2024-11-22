@@ -1,79 +1,71 @@
 package com.example.projetjee.controllers;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-// Annotation pour définir le mapping de la servlet
-@WebServlet("/grades")
 public class GradeServlet extends HttpServlet {
-
-    private GradeService gradeService;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        // Initialiser le service (par exemple, avec une couche DAO ou Hibernate)
-        gradeService = new GradeService();
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Récupérer les paramètres depuis le formulaire ou la requête
         String studentId = request.getParameter("studentId");
         String courseId = request.getParameter("courseId");
         String gradeStr = request.getParameter("grade");
 
         try {
             double grade = Double.parseDouble(gradeStr);
-            // Enregistrer la note via le service
-            boolean success = gradeService.saveGrade(studentId, courseId, grade);
 
-            // Répondre à l'utilisateur
-            if (success) {
-                response.getWriter().println("Note enregistrée avec succès !");
-            } else {
-                response.getWriter().println("Échec de l'enregistrement de la note.");
-            }
-        } catch (NumberFormatException e) {
-            response.getWriter().println("Note invalide. Veuillez entrer un nombre.");
+            // Connexion à la base de données
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "password");
+
+            String query = "INSERT INTO grades (student_id, course_id, grade) VALUES (?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, studentId);
+            stmt.setString(2, courseId);
+            stmt.setDouble(3, grade);
+
+            stmt.executeUpdate();
+            response.getWriter().println("Note enregistrée avec succès.");
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.getWriter().println("Erreur lors de l'enregistrement de la note.");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Récupérer l'ID de l'étudiant depuis la requête
         String studentId = request.getParameter("studentId");
 
-        if (studentId == null || studentId.isEmpty()) {
-            response.getWriter().println("Veuillez fournir un ID étudiant.");
-            return;
-        }
+        try {
+            // Connexion à la base de données
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "password");
 
-        // Obtenir les résultats via le service
-        List<Grade> grades = gradeService.getGradesByStudent(studentId);
+            String query = "SELECT c.name, g.grade FROM grades g INNER JOIN courses c ON g.course_id = c.id WHERE g.student_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, studentId);
 
-        // Générer une réponse HTML pour afficher les résultats
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+            ResultSet rs = stmt.executeQuery();
 
-        out.println("<html><body>");
-        out.println("<h1>Résultats pour l'étudiant ID: " + studentId + "</h1>");
-        if (grades.isEmpty()) {
-            out.println("<p>Aucun résultat trouvé.</p>");
-        } else {
-            out.println("<table border='1'>");
-            out.println("<tr><th>Cours</th><th>Note</th></tr>");
-            for (Grade grade : grades) {
-                out.println("<tr><td>" + grade.getCourseName() + "</td><td>" + grade.getGrade() + "</td></tr>");
+            response.setContentType("text/html");
+            response.getWriter().println("<h1>Résultats</h1><ul>");
+
+            while (rs.next()) {
+                String courseName = rs.getString("name");
+                double grade = rs.getDouble("grade");
+                response.getWriter().println("<li>" + courseName + ": " + grade + "</li>");
             }
-            out.println("</table>");
+
+            response.getWriter().println("</ul>");
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.getWriter().println("Erreur lors de la consultation des résultats.");
         }
-        out.println("</body></html>");
     }
 }
+
