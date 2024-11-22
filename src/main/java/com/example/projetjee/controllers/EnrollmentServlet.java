@@ -39,3 +39,4 @@ public class EnrollmentServlet extends HttpServlet {
             response.getWriter().println("Erreur lors de l'inscription.");
         }
     }
+}
