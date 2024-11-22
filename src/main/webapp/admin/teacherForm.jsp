@@ -52,6 +52,6 @@
   <input type="submit" value="Soumettre">
 </form>
 
-<a href="home.jsp">Retour à l'accueil</a>
+<a href="${pageContext.request.contextPath}/home.jsp">Retour à l'accueil</a>
 </body>
 </html>
