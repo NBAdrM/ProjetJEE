@@ -3,7 +3,7 @@ package com.example.projetjee.models;
 public class Grade {
     private String studentId;
     private String courseId;
-    private String courseName; // Nom du cours
+    private String courseName;
     private double grade;
 
     // Constructeurs, getters et setters

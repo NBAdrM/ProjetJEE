@@ -2,7 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Student Form</title>
+  <title>
+    <%
+      String id = (String) request.getAttribute("id");
+      out.print(id != null ? "Modifier l'étudiant" : "Créer un nouvel étudiant");
+    %>
+  </title>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/studentForm.css">
   <!-- Ajout du style pour le bouton et le rectangle du rapport (je n'arrive pas a le placer dans le css et à le faire apparaitre-->
   <style>
@@ -39,7 +44,11 @@
 
 
 <body>
-<h2>Enregistrer un nouveau étudiant</h2>
+<h2>
+  <%
+    out.print(id != null ? "Modifier un étudiant" : "Enregistrer un nouveau étudiant");
+  %>
+</h2>
 
 <!-- Display error or success messages -->
 <c:if test="${not empty error}">
@@ -50,24 +59,26 @@
 </c:if>
 
 <form action="${pageContext.request.contextPath}/student" method="post">
+  <input type="hidden" name="id" value="${id}">
   <label for="lastName">Nom de famille:</label><br>
-  <input type="text" id="lastName" name="lastName" required><br><br>
+  <input type="text" id="lastName" name="lastName" value="${student.lastName}" required><br><br>
 
   <label for="firstName">Prénom:</label><br>
-  <input type="text" id="firstName" name="firstName" required><br><br>
+  <input type="text" id="firstName" name="firstName" value="${student.firstName}" required><br><br>
 
   <label for="email">Email:</label><br>
-  <input type="email" id="email" name="email" required><br><br>
+  <input type="email" id="email" name="email" value="${student.email}" required><br><br>
 
   <label for="address">Adresse:</label><br>
-  <input type="text" id="address" name="address" required><br><br>
+  <input type="text" id="address" name="address" value="${student.address}" required><br><br>
 
   <label for="report">Rapport:</label><br>
-  <textarea id="report" name="report" required></textarea><br><br>
+  <textarea id="report" name="report" required>${student.report}</textarea><br><br>
 
   <input type="submit" value="Soumettre">
 </form>
 
-<a href="home.jsp" class="a">Retour accueil</a>
+
+<a href="${pageContext.request.contextPath}/admin/admin.jsp" class="a">Retour</a>
 </body>
 </html>
