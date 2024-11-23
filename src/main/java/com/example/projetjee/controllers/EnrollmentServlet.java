@@ -24,7 +24,7 @@ public class EnrollmentServlet extends HttpServlet {
 
         try {
             // Connexion à la base de données
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "password");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "cytech0001");
 
             String query = "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)";
             PreparedStatement stmt = connection.prepareStatement(query);
