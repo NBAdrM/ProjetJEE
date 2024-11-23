@@ -1,4 +1,3 @@
-// admin.js
 function filterTable() {
     let filter = document.getElementById("filter").value;
 
