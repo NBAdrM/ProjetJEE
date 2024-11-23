@@ -1,5 +1,4 @@
 package com.example.projetjee.controllers;
-import com.example.projetjee.models.Person;
 import com.example.projetjee.models.Student;
 import com.example.projetjee.models.Teacher;
 import com.example.projetjee.utils.DbConnnect;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 public class AdminServlet extends HttpServlet {
@@ -83,6 +83,10 @@ public class AdminServlet extends HttpServlet {
                 case "student":
                     List<Student> students = DbConnnect.getStudents();
                     logger.info("Students list: " + students);
+                    students = students.stream()
+                            .filter(Student::getActive) //
+                            .collect(Collectors.toList());
+                    logger.info("Filtered Students list: " + students);
                     String studentJson = gson.toJson(students);
                     response.getWriter().write(studentJson);
                     break;
@@ -90,6 +94,10 @@ public class AdminServlet extends HttpServlet {
                 case "teacher":
                     List<Teacher> teachers = DbConnnect.getTeachers();
                     logger.info("Teachers list: " + teachers);
+                    teachers = teachers.stream()
+                            .filter(Teacher::getActive) //
+                            .collect(Collectors.toList());
+                    logger.info("Filtered Teachers list: " + teachers);
                     String teacherJson = gson.toJson(teachers);
                     response.getWriter().write(teacherJson);
                     break;
@@ -113,9 +121,14 @@ public class AdminServlet extends HttpServlet {
         String id = request.getParameter("id");
         verifyId(id);
 
-        //DbConnnect.deleteUser(id);
+        try {
+            DbConnnect.deletePerson(Integer.parseInt(id));
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.severe("Error deleting user: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
         request.setAttribute("success", "User deleted successfully");
-        request.getRequestDispatcher("/admin.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/admin/admin.jsp");
     }
 
     /*

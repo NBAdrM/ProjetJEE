@@ -77,9 +77,7 @@ public class Person {
         this.password = password;
     }
 
-    public boolean isActive() {
-        return active;
-    }
+    public boolean getActive() {return active;}
 
     public void setActive(boolean active) {
         this.active = active;

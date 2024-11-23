@@ -57,7 +57,7 @@ public class StudentServlet extends HttpServlet {
                 String password = UserGenerator.generatePassword();
                 logger.info("Generated username: " + username + " and password: " + password);
 
-                Student student = new Student(-1, lastName, firstName, email, address, username, password, Boolean.TRUE, report);
+                Student student = new Student(-1, firstName, lastName, email, address, username, password, Boolean.TRUE, report);
                 int newId = DbConnnect.addStudent(student.getFirstName(), student.getLastName(), student.getEmail(), student.getAddress(),
                         student.getUsername(), student.getPassword(), Boolean.TRUE, student.getReport());
                 student.setId(newId);
@@ -66,7 +66,7 @@ public class StudentServlet extends HttpServlet {
             }
 
             // Rediriger vers la page admin
-            request.getRequestDispatcher("/admin/admin.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/admin/admin.jsp");
 
         } catch (SQLException | ClassNotFoundException e) {
             logger.warning("SQL Error: " + e.getMessage());
