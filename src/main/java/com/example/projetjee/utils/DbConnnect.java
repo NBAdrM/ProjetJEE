@@ -198,6 +198,24 @@ public class DbConnnect {
         conn.close();
     }
 
+    public static void updateTeacher(int id ,String firstName, String lastName, String email, String adress,Boolean active) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "UPDATE Teacher SET first_name=? , last_name=? , email=? , address=? , active=? WHERE id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setString(1, firstName);
+        stmt.setString(2, lastName);
+        stmt.setString(3, email);
+        stmt.setString(4, adress);
+        stmt.setBoolean(5, active);
+        stmt.setInt(6,id);
+        stmt.executeUpdate();
+        stmt.close();
+        conn.close();
+    }
+
     public static void updateStudent(int id ,String firstName, String lastName, String email, String adress,Boolean active, String report) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 
@@ -212,7 +230,7 @@ public class DbConnnect {
         stmt.setBoolean(5, active);
         stmt.setString(6, report);
         stmt.setInt(7,id);
-        stmt.executeQuery();
+        stmt.executeUpdate();
         stmt.close();
         conn.close();
     }
@@ -313,6 +331,35 @@ public class DbConnnect {
         }
         return null;
     }
+
+    public static Teacher getTeacher(int id) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Teacher AS t INNER JOIN Person AS p ON t.id=p.id WHERE p.id=?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            String firstname = rs.getString("first_name");
+            String lastname = rs.getString("last_name");
+            String email = rs.getString("email");
+            String address = rs.getString("address");
+            String username = rs.getString("username");
+            String password = rs.getString("password");
+            Boolean active = rs.getBoolean("active");
+
+            // Crée une instance de Teacher et la retourne
+            return new Teacher(id, firstname, lastname, email, address, username, password, active);
+        }
+
+        stmt.close();
+        conn.close();
+        return null;
+    }
+
 
     public static Integer getUserIdByUsername(String username) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();

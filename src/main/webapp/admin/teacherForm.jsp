@@ -2,7 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Teacher Form</title>
+  <title>
+    <%
+      String id = (String) request.getAttribute("id");
+      out.print(id != null ? "Modifier le professeur" : "Créer un nouveau professeur");
+    %>
+  </title>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/teacherForm.css">
   <!-- Ajout du style pour le bouton (je n'arrive pas a le placer dans le css et à le faire apparaitre-->
   <style>
@@ -26,7 +31,11 @@
   </style>
 </head>
 <body>
-<h2>Enregistrer un nouveau professeur</h2>
+<h2>
+  <%
+    out.print(id != null ? "Modifier le professeur" : "Créer un nouveau professeur");
+  %>
+</h2>
 
 <!-- Affichage des messages d'erreur ou de succès -->
 <c:if test="${not empty error}">
@@ -37,21 +46,22 @@
 </c:if>
 
 <form action="${pageContext.request.contextPath}/teacher" method="post">
+  <input type="hidden" name="id" value="${id}">
   <label for="lastName">Nom de famille:</label><br>
-  <input type="text" id="lastName" name="lastName" required><br><br>
+  <input type="text" id="lastName" name="lastName" value="${teacher.lastName}" required><br><br>
 
   <label for="firstName">Prénom:</label><br>
-  <input type="text" id="firstName" name="firstName" required><br><br>
+  <input type="text" id="firstName" name="firstName" value="${teacher.firstName}" required><br><br>
 
   <label for="email">Email:</label><br>
-  <input type="email" id="email" name="email" required><br><br>
+  <input type="email" id="email" name="email" value="${teacher.email}" required><br><br>
 
   <label for="address">Adresse:</label><br>
-  <input type="text" id="address" name="address" required><br><br>
+  <input type="text" id="address" name="address" value="${teacher.address}" required><br><br>
 
   <input type="submit" value="Soumettre">
 </form>
 
-<a href="home.jsp">Retour à l'accueil</a>
+<a href="${pageContext.request.contextPath}/admin/admin.jsp" class="a">Retour</a>
 </body>
 </html>

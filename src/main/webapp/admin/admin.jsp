@@ -1,85 +1,46 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.projetjee.models.Student" %>
+<%@ page import="com.example.projetjee.models.Teacher" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Administration Panel</title>
+    <title>Panneau Administration</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/admin.css">
-    <style>
-        .a {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            font-weight: bold;
-            color: #333333;
-            text-decoration: none;
-            background-color: #ffffff;
-            padding: 5px 10px;
-            border: 1px solid #333333;
-            border-radius: 4px;
-            z-index: 1000;
-        }
-        .a:hover {
-            background-color: #5982C2;
-            color: #ffffff;
-        }
-    </style>
+    <script src="${pageContext.request.contextPath}/ressources/js/admin.js"></script>
 </head>
 <body>
-<h1>Administration Panel</h1>
+<h1>Panneau d'administration</h1>
 
-<!-- Affichage des messages de réussite et d'erreur -->
-<c:if test="${not empty success}">
-    <p style="color: green;">${success}</p>
-</c:if>
-<c:if test="${not empty error}">
-    <p style="color: red;">${error}</p>
-</c:if>
+<!-- Boutons pour ajouter un nouvel utilisateur -->
+<div style="text-align: center; margin-bottom: 20px;">
+    <a href="${pageContext.request.contextPath}/admin/studentForm.jsp" class="button">Ajouter un élève</a>
+    <a href="${pageContext.request.contextPath}/admin/teacherForm.jsp" class="button">Ajouter un professeur</a>
+</div>
 
-<!-- Formulaire pour l'action de l'administrateur -->
-<form action="${pageContext.request.contextPath}/adminServlet" method="post">
-    <label for="action">Action:</label>
-    <select name="action" id="action" required>
-        <option value="create">Créer</option>
-        <option value="modify">Modifier</option>
-        <option value="delete">Effacer</option>
+<!-- Filtre pour afficher les élèves ou les professeurs -->
+<div class="filter-container" style="margin-bottom: 20px;">
+    <label for="filter">Filtrer par rôle : </label>
+    <select id="filter" onchange="filterTable()">
+        <option> </option>
+        <option value="student">Élèves</option>
+        <option value="teacher">Professeurs</option>
     </select>
-    <br><br>
+</div>
 
-    <label for="role">Role:</label>
-    <select name="role" id="role" required>
-        <option value="student">Elève</option>
-        <option value="teacher">Professeur</option>
-    </select>
-    <br><br>
-
-    <!-- Champ pour l'ID, requis seulement pour modifier ou effacer -->
-    <div id="id-container" style="display: none;">
-        <label for="id">ID (pour modifier/effacer):</label>
-        <input type="text" name="id" id="id">
-        <br><br>
-    </div>
-
-    <input type="submit" value="Soumettre">
-</form>
-
-<!-- Bouton de retour à l'accueil -->
-<a href="home.jsp" class="a">Retour à l'accueil</a>
-
-<!-- Script pour montrer ou cacher le champ ID selon l'action choisie -->
-<script>
-    document.getElementById('action').addEventListener('change', function () {
-        var idContainer = document.getElementById('id-container');
-        var idField = document.getElementById('id');
-        if (this.value === 'modify' || this.value === 'delete') {
-            idContainer.style.display = 'block';
-            idField.required = true;
-        } else {
-            idContainer.style.display = 'none';
-            idField.required = false;
-            idField.value = '';
-        }
-    });
-</script>
-
+<!-- Tableau des utilisateurs -->
+<table id="userTable" border="1" cellspacing="0" cellpadding="10" style="width: 100%; text-align: left;">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Rôle</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Les lignes seront ajoutées dynamiquement ici -->
+    </tbody>
+</table>
 </body>
 </html>
