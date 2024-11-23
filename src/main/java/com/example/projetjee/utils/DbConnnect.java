@@ -198,10 +198,28 @@ public class DbConnnect {
         conn.close();
     }
 
+    public static void updateTeacher(int id ,String firstName, String lastName, String email, String adress,Boolean active) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "UPDATE Person SET first_name=? , last_name=? , email=? , address=? , active=? WHERE id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setString(1, firstName);
+        stmt.setString(2, lastName);
+        stmt.setString(3, email);
+        stmt.setString(4, adress);
+        stmt.setBoolean(5, active);
+        stmt.setInt(6,id);
+        stmt.executeUpdate();
+        stmt.close();
+        conn.close();
+    }
+
     public static void updateStudent(int id ,String firstName, String lastName, String email, String adress,Boolean active, String report) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 
-        String query = "UPDATE Student SET first_name=? , last_name=? , email=? , address=? , active=? ,report = ? WHERE id = ?";
+        String query = "UPDATE Person p INNER JOIN Student s ON s.id = p.id SET p.first_name=? , p.last_name=? , p.email=? , p.address=? , p.active=? ,s.report = ? WHERE p.id = ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
 
@@ -212,7 +230,7 @@ public class DbConnnect {
         stmt.setBoolean(5, active);
         stmt.setString(6, report);
         stmt.setInt(7,id);
-        stmt.executeQuery();
+        stmt.executeUpdate();
         stmt.close();
         conn.close();
     }
@@ -427,4 +445,59 @@ public class DbConnnect {
         return role;
     }
 
+    public static int addCourse(String name,int year,int teacherId) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "INSERT INTO Course (name,year,Teacher_Person_id) VALUES (?,?,?)";
+        PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        stmt.setString(1,name);
+        stmt.setInt(2,year);
+        stmt.setInt(3,teacherId);
+
+        int rowsAffected = stmt.executeUpdate();
+
+        int generatedId = -1;
+        if (rowsAffected > 0) {
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                generatedId = generatedKeys.getInt(1);
+            }
+            generatedKeys.close();
+        }
+
+        stmt.close();
+        conn.close();
+
+        return generatedId;
+    }
+
+    public static int addDateCourse(String date,String startTime,String endTime,String classroom,int courseId) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "INSERT INTO Date_Course (date,start_time,end_time,classroom,Course_id) VALUES (?,?,?,?,?)";
+        PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        stmt.setString(1,date);
+        stmt.setString(2,startTime);
+        stmt.setString(3,endTime);
+        stmt.setString(4,classroom);
+        stmt.setInt(5,courseId);
+
+        int rowsAffected = stmt.executeUpdate();
+
+        int generatedId = -1;
+        if (rowsAffected > 0) {
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                generatedId = generatedKeys.getInt(1);
+            }
+            generatedKeys.close();
+        }
+
+        stmt.close();
+        conn.close();
+
+        return generatedId;
+    }
 }
