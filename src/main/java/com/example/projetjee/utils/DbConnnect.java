@@ -15,7 +15,7 @@ public class DbConnnect {
     private static final String USER = "root";
     private static final String PASSWORD = "cytech0001";
 
-    private static Connection initializeDatabase() throws SQLException, ClassNotFoundException {
+    public static Connection initializeDatabase() throws SQLException, ClassNotFoundException {
         // Charge le driver JDBC
         Class.forName("com.mysql.cj.jdbc.Driver");
 
