@@ -24,6 +24,7 @@
 
 <h1 class="header">Bienvenue sur CY Note</h1>
 
+
 <div class="content">
     <h2>Bienvenue, <%= username %>!</h2>
     <p>Choisissez une des options ci-dessous :</p>
