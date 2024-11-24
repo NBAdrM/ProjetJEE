@@ -2,7 +2,7 @@
 <%
     // Redirection si l'utilisateur est déjà connecté
     if (session != null && session.getAttribute("username") != null) {
-        response.sendRedirect("home.jsp");
+        response.sendRedirect(request.getContextPath() + "home.jsp");
         return;
     }
 %>
