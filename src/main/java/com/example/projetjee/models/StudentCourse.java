@@ -1,16 +1,17 @@
 package com.example.projetjee.models;
 
+import java.util.List;
+
 public class StudentCourse {
     private int courseId;
     private int studentId;
-    private Integer grade;
+    private List<Grade> grades;
     private Integer degree;
 
-    public StudentCourse(int courseId, int studentId, Integer grade, Integer degree) {
+    public StudentCourse(int courseId, int studentId, List<Grade> grades) {
         this.courseId = courseId;
         this.studentId = studentId;
-        this.grade = grade;
-        this.degree = degree;
+        this.grades = grades;
     }
 
     public int getCourseId() {
@@ -29,12 +30,12 @@ public class StudentCourse {
         this.studentId = studentId;
     }
 
-    public Integer getGrade() {
-        return grade;
+    public List<Grade> getGrades() {
+        return grades;
     }
 
-    public void setGrade(Integer grade) {
-        this.grade = grade;
+    public void setGrades(List<Grade> grades) {
+        this.grades = grades;
     }
 
     public Integer getDegree() {
