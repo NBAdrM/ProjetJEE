@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.projetjee.models.Course;
 import com.example.projetjee.models.Person;
 import com.example.projetjee.models.Student;
 import com.example.projetjee.models.Teacher;
@@ -531,5 +532,31 @@ public class DbConnnect {
         stmt.close();
         conn.close();
         return students;
+    }
+
+    public static List<Course> getCoursesByTeacher(int teacherId) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Course WHERE Teacher_Person_id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, teacherId);
+
+        ResultSet rs = stmt.executeQuery();
+        List<Course> courses = new ArrayList<>();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            int year = rs.getInt("year");
+            String classroom = rs.getString("classroom");
+
+            courses.add(new Course(id, name, year, teacherId, classroom));
+        }
+
+        stmt.close();
+        conn.close();
+        return courses;
     }
 }
