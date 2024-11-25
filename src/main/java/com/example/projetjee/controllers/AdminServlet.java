@@ -1,8 +1,8 @@
 package com.example.projetjee.controllers;
-import com.example.projetjee.models.Person;
 import com.example.projetjee.models.Student;
 import com.example.projetjee.models.Teacher;
 import com.example.projetjee.utils.DbConnnect;
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 public class AdminServlet extends HttpServlet {
@@ -37,20 +38,25 @@ public class AdminServlet extends HttpServlet {
         }
 
         //Redirect to the correct action
-        switch (action) {
-            case "create":
-                dispatchRole(request, response, role, String.valueOf(-1)); //Set id to -1 to avoid null pointer exception and to indicate that it's a creation
-                break;
-            case "modify":
-                verifyId(id);
-                dispatchRole(request, response, role, id);
-                break;
-            case "delete" :
-                doDelete(request, response); //Redirect to the doDelete method because HTML doesn't support DELETE method
-                break;
-            default:
-                logger.warning("unknown action: " + action);
-                throw new ServletException("Invalid action");
+        try {
+            switch (action) {
+                case "create":
+                    dispatchRole(request, response, role, String.valueOf(-1)); //Set id to -1 to avoid null pointer exception and to indicate that it's a creation
+                    break;
+                case "modify":
+                    verifyId(id);
+                    dispatchRole(request, response, role, id);
+                    break;
+                case "delete":
+                    doDelete(request, response); //Redirect to the doDelete method because HTML doesn't support DELETE method
+                    break;
+                default:
+                    logger.warning("unknown action: " + action);
+                    throw new ServletException("Invalid action");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.severe("Error fetching data: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching data");
         }
     }
     /*
@@ -58,6 +64,8 @@ public class AdminServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Start get");
+        logger.info("Request URI: " + request.getRequestURI());
+        logger.info("Query String: " + request.getQueryString());
         String role = request.getParameter("role");
         logger.info("request get \nrole: " + role);
 
@@ -66,36 +74,44 @@ public class AdminServlet extends HttpServlet {
             throw new ServletException("Role is required");
         }
 
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
 
-        switch (role){
-            case "student":
-                List<Student> listStudent;
-                logger.info("Get students");
-                try {
-                    listStudent = DbConnnect.getStudents();
-                } catch (SQLException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                logger.info("students list : " + listStudent);
-                request.setAttribute("list", listStudent);
-                break;
-            case "teacher":
-                List<Teacher> listTeacher;
-                logger.info("Get teachers");
-                try {
-                    listTeacher = DbConnnect.getTeachers();
-                } catch (SQLException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                logger.info("teachers list : " + listTeacher);
-                request.setAttribute("list", listTeacher);
-                break;
-            default:
-                logger.warning("unknown role: " + role);
-                throw new ServletException("Invalid role");
+        try {
+            switch (role) {
+                case "student":
+                    List<Student> students = DbConnnect.getStudents();
+                    logger.info("Students list: " + students);
+                    students = students.stream()
+                            .filter(Student::getActive) //
+                            .collect(Collectors.toList());
+                    logger.info("Filtered Students list: " + students);
+                    String studentJson = gson.toJson(students);
+                    response.getWriter().write(studentJson);
+                    break;
+
+                case "teacher":
+                    List<Teacher> teachers = DbConnnect.getTeachers();
+                    logger.info("Teachers list: " + teachers);
+                    teachers = teachers.stream()
+                            .filter(Teacher::getActive) //
+                            .collect(Collectors.toList());
+                    logger.info("Filtered Teachers list: " + teachers);
+                    String teacherJson = gson.toJson(teachers);
+                    response.getWriter().write(teacherJson);
+                    break;
+
+                default:
+                    logger.warning("Unknown role: " + role);
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid role");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.severe("Error fetching data: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching data");
         }
-
     }
+
 
     /*
      * This method will be called when an admin wants to delete a user
@@ -105,9 +121,14 @@ public class AdminServlet extends HttpServlet {
         String id = request.getParameter("id");
         verifyId(id);
 
-        //DbConnnect.deleteUser(id);
+        try {
+            DbConnnect.deletePerson(Integer.parseInt(id));
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.severe("Error deleting user: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
         request.setAttribute("success", "User deleted successfully");
-        request.getRequestDispatcher("/admin.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/admin/admin.jsp");
     }
 
     /*
@@ -118,15 +139,19 @@ public class AdminServlet extends HttpServlet {
         * @param String id : The id of the user
         *
      */
-    private void dispatchRole(HttpServletRequest request, HttpServletResponse response, String role, String id) throws ServletException, IOException {
+    private void dispatchRole(HttpServletRequest request, HttpServletResponse response, String role, String id) throws ServletException, IOException, SQLException, ClassNotFoundException {
         logger.info("Start dispatch role");
 
         //Add id to the request
         request.setAttribute("id", id);
 
         if (role.equals("student")) {
+            Student student = DbConnnect.getStudent(Integer.parseInt(id));
+            request.setAttribute("student", student);
             request.getRequestDispatcher("/admin/studentForm.jsp").forward(request, response);
         } else if (role.equals("teacher")) {
+            Teacher teacher = DbConnnect.getTeacher(Integer.parseInt(id));
+            request.setAttribute("teacher", teacher);
             request.getRequestDispatcher("/admin/teacherForm.jsp").forward(request, response);
         } else {
             logger.warning("unknown role: " + role);

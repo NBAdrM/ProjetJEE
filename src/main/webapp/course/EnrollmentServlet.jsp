@@ -1,57 +1,40 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-  <title>Gestion des Inscriptions</title>
-  <link rel="stylesheet" href="EnrollmentServlet.css">
+  <title>Inscription à un Cours</title>
+  <script> const contextPath = "${pageContext.request.contextPath}"; </script>
+  <script src="${pageContext.request.contextPath}/resources/js/initCourse.js"></script>
 </head>
 <body>
-<h1>Gestion des Inscriptions</h1>
-
-<div>
-  <h2>Inscrire un étudiant</h2>
-  <form id="enrollForm" method="post" action="${pageContext.request.contextPath}/EnrollmentServlet">
-    <label for="studentId">ID Étudiant:</label>
-    <input type="text" id="studentId" name="studentId" required><br>
-
-    <label for="courseId">ID du Cours:</label>
-    <input type="text" id="courseId" name="courseId" required><br>
-
-    <button type="submit">Inscrire</button>
-  </form>
+<h1>Inscription à un Cours</h1>
+<!-- Affichage du message de succès -->
+<div style="color: green; font-weight: bold;">
+  <c:if test="${not empty successMessage}">
+    ${successMessage}
+  </c:if>
 </div>
 
-<div>
-  <h2>Consulter les cours d'un étudiant</h2>
-  <form id="getCoursesForm" method="get" action="/projetjee/enrollments/student">
-    <label for="queryStudentId">ID Étudiant:</label>
-    <input type="text" id="queryStudentId" name="studentId" required><br>
-
-    <button type="submit">Rechercher</button>
-  </form>
-  <div id="coursesList">
-    <%-- L'endroit où les résultats des cours seront affichés --%>
-  </div>
+<!-- Affichage du message d'erreur si l'inscription échoue -->
+<div style="color: red; font-weight: bold;">
+  <c:if test="${not empty errorMessage}">
+    ${errorMessage}
+  </c:if>
 </div>
 
-<script>
-  document.getElementById('getCoursesForm').onsubmit = function (e) {
-    e.preventDefault();
-    var studentId = document.getElementById('queryStudentId').value;
-    fetch('/projetjee/enrollments/student/' + studentId)
-            .then(response => response.json())
-            .then(data => {
-              let courseListHtml = '<h3>Liste des Cours</h3><ul>';
-              data.forEach(course => {
-                courseListHtml += '<li>' + course.name + '</li>';
-              });
-              courseListHtml += '</ul>';
-              document.getElementById('coursesList').innerHTML = courseListHtml;
-            })
-            .catch(error => {
-              document.getElementById('coursesList').innerHTML = '<p>Erreur lors de la récupération des données</p>';
-              console.error('Erreur:', error);
-            });
-  };
-</script>
+<!-- Formulaire d'inscription -->
+<form id="enrollForm" method="post" action="${pageContext.request.contextPath}/enrollment">
+  <label>Choisissez un cours :</label>
+  <select id="courseId" name="courseId" required>
+    <!-- Les options seront ajoutées dynamiquement ici -->
+  </select><br>
+
+  <button type="submit">Inscrire</button>
+</form>
+
+<!-- Bouton pour revenir à l'accueil -->
+<a href="${pageContext.request.contextPath}/home.jsp">
+  <button>Revenir à l'accueil</button>
+</a>
+
 </body>
 </html>

@@ -1,0 +1,85 @@
+/* Bouton */
+.button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+.button.delete {
+    background-color: #ff4d4d;
+}
+
+.button.delete:hover {
+    background-color: #e03e3e;
+}
+
+/* Table */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Conteneur de filtre */
+.filter-container {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Corps */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    text-align: center;
+}
+
+.logout button {
+    background-color: #ff4758; /* Rouge pour le bouton de déconnexion */
+    color: white;
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none; /* Enlever la bordure par défaut */
+    cursor: pointer; /* Ajouter un curseur pointer pour indiquer que c'est un bouton */
+}
+
+.logout button:hover {
+    background-color: #e0414d; /* Couleur un peu plus foncée au survol */
+    transform: translateY(-2px);
+}
+
+.logout button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

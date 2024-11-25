@@ -1,71 +1,40 @@
 package com.example.projetjee.controllers;
 
+import com.example.projetjee.models.Course;
+import com.example.projetjee.models.Grade;
+import com.example.projetjee.models.Student;
+import com.example.projetjee.utils.DbConnnect;
+import com.google.gson.Gson;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class GradeServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(StudentServlet.class.getName());
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String studentId = request.getParameter("studentId");
-        String courseId = request.getParameter("courseId");
-        String gradeStr = request.getParameter("grade");
-
-        try {
-            double grade = Double.parseDouble(gradeStr);
-
-            // Connexion à la base de données
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "password");
-
-            String query = "INSERT INTO grades (student_id, course_id, grade) VALUES (?, ?, ?)";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, studentId);
-            stmt.setString(2, courseId);
-            stmt.setDouble(3, grade);
-
-            stmt.executeUpdate();
-            response.getWriter().println("Note enregistrée avec succès.");
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.getWriter().println("Erreur lors de l'enregistrement de la note.");
-        }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String studentId = request.getParameter("studentId");
-
+        logger.info("GET /grade");
+        int teacherId = (int) request.getSession().getAttribute("userId");
+        logger.info("teacherId: " + teacherId);
         try {
-            // Connexion à la base de données
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "password");
+            List<Course> courses = DbConnnect.getCoursesByTeacher(teacherId);
+            logger.info("courses: " + courses);
 
-            String query = "SELECT c.name, g.grade FROM grades g INNER JOIN courses c ON g.course_id = c.id WHERE g.student_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, studentId);
-
-            ResultSet rs = stmt.executeQuery();
-
-            response.setContentType("text/html");
-            response.getWriter().println("<h1>Résultats</h1><ul>");
-
-            while (rs.next()) {
-                String courseName = rs.getString("name");
-                double grade = rs.getDouble("grade");
-                response.getWriter().println("<li>" + courseName + ": " + grade + "</li>");
-            }
-
-            response.getWriter().println("</ul>");
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.getWriter().println("Erreur lors de la consultation des résultats.");
+            String coursesJson = new Gson().toJson(courses);
+            response.getWriter().write(coursesJson);
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.severe("Erreur lors de la récupération des cours : " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erreur lors de la récupération des cours.");
         }
     }
 }
-

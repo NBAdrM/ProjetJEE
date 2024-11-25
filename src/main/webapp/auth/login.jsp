@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     // Redirection si l'utilisateur est déjà connecté
-    if (session != null && session.getAttribute("username") != null) {
-        response.sendRedirect("home.jsp");
+    if (session != null && session.getAttribute("username") != null && session.getAttribute("role") == "admin") {
+        response.sendRedirect(request.getContextPath() + "/admin/admin.jsp");
+    }else if (session != null && session.getAttribute("username") != null) {
+        response.sendRedirect(request.getContextPath() + "/home.jsp");
         return;
     }
 %>
@@ -11,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Page de connexion</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/login.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/login.css">
 </head>
 <body>
 

@@ -1,41 +1,21 @@
 package com.example.projetjee.models;
 
 public class Grade {
-    private String studentId;
-    private String courseId;
-    private String courseName; // Nom du cours
+
     private double grade;
+    private String date;
 
-    // Constructeurs, getters et setters
-    public Grade(String studentId, String courseId, String courseName, double grade) {
-        this.studentId = studentId;
-        this.courseId = courseId;
-        this.courseName = courseName;
+    public Grade( double grade,String date) {
         this.grade = grade;
+        this.date = date;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getDate() {
+        return date;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public double getGrade() {
