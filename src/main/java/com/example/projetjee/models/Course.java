@@ -7,19 +7,15 @@ import java.sql.SQLException;
 public class Course {
     private int id;
     private String name;
-    private int degree;
     private int year;
     private int teacherId;
-    private String classroom;
     private String teacherName;
 
-    public Course(int id, String name, int degree ,int year,int teacherId) throws SQLException, ClassNotFoundException {
+    public Course(int id, String name, int year, int teacherId) throws SQLException, ClassNotFoundException {
         this.id = id;
         this.name = name;
-        this.degree = degree;
         this.year = year;
         this.teacherId = teacherId;
-        this.classroom = classroom;
         this.teacherName = DbConnect.getTeacher(teacherId).getLastName();
     }
 
@@ -55,24 +51,12 @@ public class Course {
         this.teacherId = teacherId;
     }
 
-    public String getClassroom() {
-        return classroom;
-    }
-
-    public void setClassroom(String classroom) {
-        this.classroom = classroom;
-    }
-
     public String getTeacherName() {
         return teacherName;
     }
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
-    }
-
-    public String getName() {
-        return name;
     }
 }
 

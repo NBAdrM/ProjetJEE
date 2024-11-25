@@ -3,7 +3,7 @@ package com.example.projetjee.controllers;
 import com.example.projetjee.models.Course;
 import com.example.projetjee.models.Grade;
 import com.example.projetjee.models.Student;
-import com.example.projetjee.utils.DbConnnect;
+import com.example.projetjee.utils.DbConnect;
 import com.google.gson.Gson;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -27,7 +27,7 @@ public class GradeServlet extends HttpServlet {
         int teacherId = (int) request.getSession().getAttribute("userId");
         logger.info("teacherId: " + teacherId);
         try {
-            List<Course> courses = DbConnnect.getCoursesByTeacher(teacherId);
+            List<Course> courses = DbConnect.getCoursesByTeacher(teacherId);
             logger.info("courses: " + courses);
 
             String coursesJson = new Gson().toJson(courses);

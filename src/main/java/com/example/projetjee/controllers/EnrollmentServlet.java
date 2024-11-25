@@ -39,7 +39,7 @@ public class EnrollmentServlet extends HttpServlet {
         try {
             int courseId = Integer.parseInt(courseIdStr);
             logger.info("Inscription de l'étudiant ID: " + studentId + " au cours ID: " + courseId);
-            DbConnnect.addStudentFollowCourse(studentId, courseId);
+            DbConnect.addStudentFollowCourse(studentId, courseId);
             session.setAttribute("successMessage", "Inscription réussie !");
             response.sendRedirect(request.getContextPath() + "/enrollmentSuccess.jsp");
         } catch (NumberFormatException e) {
@@ -62,13 +62,13 @@ public class EnrollmentServlet extends HttpServlet {
         try {
             if ("getCoursesAndTeachers".equals(action)) {
                 logger.info("Chargement des cours et des enseignants.");
-                List<Course> courses = DbConnnect.getCourses();
+                List<Course> courses = DbConnect.getCourses();
                 logger.info("Nombre de cours récupérés : " + courses.size());
                 response.setContentType("application/json");
                 response.getWriter().write(new Gson().toJson(courses));
             } else {
                 logger.info("Chargement de la page JSP pour la gestion des cours.");
-                List<Course> courses = DbConnnect.getCourses();
+                List<Course> courses = DbConnect.getCourses();
 
                 logger.info("Nombre de cours récupérés pour JSP : " + courses.size());
                 request.setAttribute("courses", courses);
