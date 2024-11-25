@@ -6,10 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.projetjee.models.Course;
-import com.example.projetjee.models.Person;
-import com.example.projetjee.models.Student;
-import com.example.projetjee.models.Teacher;
+import com.example.projetjee.models.*;
 import org.mindrot.jbcrypt.BCrypt;
 public class DbConnnect {
     private static final String URL = "jdbc:mysql://localhost:3306/projetjeedb";
@@ -559,4 +556,87 @@ public class DbConnnect {
         conn.close();
         return courses;
     }
+
+    public static void addStudentFollowCourse(int studentId,int courseId) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "INSERT INTO Student_has_Course (Student_id,course_id) VALUES (?,?)";
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1,studentId);
+        stmt.setInt(2,courseId);
+
+        stmt.executeUpdate();
+
+        stmt.close();
+        conn.close();
+    }
+
+    public static void addGrade(int studentId,int courseId,float grade,String date) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "INSERT INTO Garde_of_Student (student_course_id_course,student_course_id_student,grade,date) VALUES (?,?,?,?)";
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1,courseId);
+        stmt.setInt(2,studentId);
+        stmt.setFloat(3,grade);
+        stmt.setString(4,date);
+
+        stmt.executeUpdate();
+
+        stmt.close();
+        conn.close();
+    }
+
+    public static List<Grade> getGrades(int studentId, int courseId) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Garde_of_Student WHERE student_course_id_student = ? AND student_course_id_course = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, studentId);
+        stmt.setInt(2, courseId);
+
+        ResultSet rs = stmt.executeQuery();
+        List<Grade> grades = new ArrayList<>();
+
+        while (rs.next()) {
+            int grade = rs.getInt("grade");
+            String date = rs.getString("date");
+
+            grades.add(new Grade(grade, date));
+        }
+
+        stmt.close();
+        conn.close();
+        return grades;
+    }
+
+    public static List<StudentCourse> getStudentCourses(int studentId) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Student_has_Course WHERE Student_id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, studentId);
+
+        ResultSet rs = stmt.executeQuery();
+        List<StudentCourse> studentCourses = new ArrayList<>();
+
+        while (rs.next()) {
+            int courseId = rs.getInt("course_id");
+
+            List<Grade> grades = getGrades(studentId, courseId);
+
+            studentCourses.add(new StudentCourse(courseId, studentId, grades));
+        }
+
+        stmt.close();
+        conn.close();
+        return studentCourses;
+    }
+
 }
