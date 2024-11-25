@@ -2,33 +2,11 @@
 <html>
 <head>
   <title>Inscription à un Cours</title>
-  <script>
-    // Charger les cours et enseignants au chargement de la page
-    window.onload = function () {
-      fetch('${pageContext.request.contextPath}/enrollment?action=getCoursesAndTeachers')
-              .then(response => response.json())
-              .then(data => {
-                const courseSelect = document.getElementById('courseId');
-
-                // Ajouter les options pour chaque cours et professeur
-                data.forEach(item => {
-                  const option = document.createElement('option');
-                  option.value = item.courseId; // ID du cours
-                  option.textContent = item.courseName + " (Prof: " + item.teacherName + ")";
-                  courseSelect.appendChild(option);
-                });
-              })
-              .catch(error => {
-                console.error('Erreur lors du chargement des cours :', error);
-                document.getElementById('error').textContent =
-                        "Impossible de charger les cours. Veuillez réessayer plus tard.";
-              });
-    };
-  </script>
+  <script> const contextPath = "${pageContext.request.contextPath}"; </script>
+  <script src="${pageContext.request.contextPath}/resources/js/initCourse.js"></script>
 </head>
 <body>
 <h1>Inscription à un Cours</h1>
-
 <!-- Affichage du message de succès -->
 <div style="color: green; font-weight: bold;">
   <c:if test="${not empty successMessage}">
