@@ -8,7 +8,7 @@
       out.print(id != null ? "Modifier l'étudiant" : "Créer un nouvel étudiant");
     %>
   </title>
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/studentForm.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/studentForm.css">
   <!-- Ajout du style pour le bouton et le rectangle du rapport (je n'arrive pas a le placer dans le css et à le faire apparaitre-->
   <style>
     .a {
