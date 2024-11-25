@@ -9,7 +9,9 @@ import java.io.IOException;
 
 public class PdfGenerator {
     //TODO Rajouter la liste des notes
-    public static void generatBultin(){
+    public static void generatBultin(int id,int year){
+
+
         String dest = "example.pdf";
 
         try (PDDocument document = new PDDocument()) {
