@@ -1,6 +1,6 @@
 package com.example.projetjee.controllers;
 
-import com.example.projetjee.utils.DbConnnect;
+import com.example.projetjee.utils.DbConnect;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
@@ -41,7 +41,7 @@ public class EnrollmentServlet extends HttpServlet {
             int courseId = Integer.parseInt(courseIdStr); // Conversion de l'ID du cours en entier
 
             // Connexion à la base de données et inscription de l'étudiant au cours
-            try (Connection connection = DbConnnect.initializeDatabase()) {
+            try (Connection connection = DbConnect.initializeDatabase()) {
                 String enrollQuery = "INSERT INTO Student_has_Course (Student_id, course_id) VALUES (?, ?)";
                 PreparedStatement enrollStmt = connection.prepareStatement(enrollQuery);
                 enrollStmt.setInt(1, studentId); // ID de l'étudiant
@@ -74,7 +74,7 @@ public class EnrollmentServlet extends HttpServlet {
         if ("getCoursesAndTeachers".equals(action)) {
             logger.info("Demande GET reçue pour récupérer les cours et enseignants");
 
-            try (Connection connection = DbConnnect.initializeDatabase()) {
+            try (Connection connection = DbConnect.initializeDatabase()) {
                 String query = "SELECT c.id AS course_id, c.name AS course_name, p.first_name AS teacher_first_name, p.last_name AS teacher_last_name " +
                         "FROM Course c JOIN Teacher t ON c.Teacher_Person_id = t.id JOIN Person p ON t.Person_id = p.id";
                 PreparedStatement stmt = connection.prepareStatement(query);

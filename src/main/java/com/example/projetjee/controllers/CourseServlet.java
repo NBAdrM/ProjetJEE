@@ -1,7 +1,7 @@
 package com.example.projetjee.controllers;
 
 import com.example.projetjee.models.Course;
-import com.example.projetjee.utils.DbConnnect;
+import com.example.projetjee.utils.DbConnect;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import com.google.gson.Gson;
@@ -40,7 +40,7 @@ public class CourseServlet extends HttpServlet {
 
         try {
             // Ajouter le cours en utilisant les 3 paramètres attendus par la méthode addCourse
-            int generatedId = DbConnnect.addCourse(name, year, teacherId);
+            int generatedId = DbConnect.addCourse(name, year, teacherId);
 
             if (generatedId > 0) {
                 response.setStatus(HttpServletResponse.SC_CREATED);
@@ -67,7 +67,7 @@ public class CourseServlet extends HttpServlet {
         if (courseIdString == null || courseIdString.isEmpty()) {
             // Si aucun ID n'est passé, renvoyer tous les cours
             String query = "SELECT * FROM courses";
-            try (Connection connection = DbConnnect.initializeDatabase();
+            try (Connection connection = DbConnect.initializeDatabase();
                  Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(query)) {
 
@@ -94,7 +94,7 @@ public class CourseServlet extends HttpServlet {
             }
 
             String query = "SELECT * FROM courses WHERE id = ?";
-            try (Connection connection = DbConnnect.initializeDatabase();
+            try (Connection connection = DbConnect.initializeDatabase();
                  PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, courseId);
                 ResultSet resultSet = statement.executeQuery();

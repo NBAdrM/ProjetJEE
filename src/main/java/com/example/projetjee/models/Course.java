@@ -1,6 +1,6 @@
 package com.example.projetjee.models;
 
-import com.example.projetjee.utils.DbConnnect;
+import com.example.projetjee.utils.DbConnect;
 
 import java.sql.SQLException;
 
@@ -20,7 +20,7 @@ public class Course {
         this.year = year;
         this.teacherId = teacherId;
         this.classroom = classroom;
-        this.teacherName = DbConnnect.getTeacher(teacherId).getLastName();
+        this.teacherName = DbConnect.getTeacher(teacherId).getLastName();
     }
 
     public int getId() {
