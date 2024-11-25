@@ -8,7 +8,7 @@
       out.print(id != null ? "Modifier le professeur" : "Créer un nouveau professeur");
     %>
   </title>
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/teacherForm.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/teacherForm.css">
   <!-- Ajout du style pour le bouton (je n'arrive pas a le placer dans le css et à le faire apparaitre-->
   <style>
     .a {
