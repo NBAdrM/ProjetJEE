@@ -1,4 +1,5 @@
 package com.example.projetjee.controllers;
+import com.example.projetjee.utils.DbConnect;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +11,6 @@ import java.util.logging.Logger;
 
 import com.example.projetjee.models.Student;
 import com.example.projetjee.utils.UserGenerator;
-import com.example.projetjee.utils.DbConnnect;
 
 public class StudentServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -46,7 +46,7 @@ public class StudentServlet extends HttpServlet {
                 logger.info("Updating student with ID: " + idInt);
 
                 Student student = new Student(idInt, lastName, firstName, email, address, null, null, Boolean.TRUE, report);
-                DbConnnect.updateStudent(student.getId(),student.getFirstName(),student.getLastName(),student.getEmail(),student.getEmail(),Boolean.TRUE,student.getReport()); // Implémente cette méthode pour mettre à jour en base
+                DbConnect.updateStudent(student.getId(),student.getFirstName(),student.getLastName(),student.getEmail(),student.getEmail(),Boolean.TRUE,student.getReport()); // Implémente cette méthode pour mettre à jour en base
 
                 request.setAttribute("success", "Student updated successfully");
             } else {
@@ -58,7 +58,7 @@ public class StudentServlet extends HttpServlet {
                 logger.info("Generated username: " + username + " and password: " + password);
 
                 Student student = new Student(-1, firstName, lastName, email, address, username, password, Boolean.TRUE, report);
-                int newId = DbConnnect.addStudent(student.getFirstName(), student.getLastName(), student.getEmail(), student.getAddress(),
+                int newId = DbConnect.addStudent(student.getFirstName(), student.getLastName(), student.getEmail(), student.getAddress(),
                         student.getUsername(), student.getPassword(), Boolean.TRUE, student.getReport());
                 student.setId(newId);
 

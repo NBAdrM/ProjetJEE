@@ -118,5 +118,16 @@
         <url-pattern>/teacher</url-pattern>
     </servlet-mapping>
 
+    <!-- StudentListServlet -->
+    <servlet>
+        <servlet-name>StudentListServlet</servlet-name>
+        <servlet-class>com.example.projetjee.controllers.StudentListServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StudentListServlet</servlet-name>
+        <url-pattern>/studentList</url-pattern>
+    </servlet-mapping>
+
 </web-app>
 
