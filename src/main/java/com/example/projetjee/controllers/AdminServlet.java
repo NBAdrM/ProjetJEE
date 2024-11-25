@@ -1,7 +1,7 @@
 package com.example.projetjee.controllers;
 import com.example.projetjee.models.Student;
 import com.example.projetjee.models.Teacher;
-import com.example.projetjee.utils.DbConnnect;
+import com.example.projetjee.utils.DbConnect;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -81,7 +81,7 @@ public class AdminServlet extends HttpServlet {
         try {
             switch (role) {
                 case "student":
-                    List<Student> students = DbConnnect.getStudents();
+                    List<Student> students = DbConnect.getStudents();
                     logger.info("Students list: " + students);
                     students = students.stream()
                             .filter(Student::getActive) //
@@ -92,7 +92,7 @@ public class AdminServlet extends HttpServlet {
                     break;
 
                 case "teacher":
-                    List<Teacher> teachers = DbConnnect.getTeachers();
+                    List<Teacher> teachers = DbConnect.getTeachers();
                     logger.info("Teachers list: " + teachers);
                     teachers = teachers.stream()
                             .filter(Teacher::getActive) //
@@ -122,7 +122,7 @@ public class AdminServlet extends HttpServlet {
         verifyId(id);
 
         try {
-            DbConnnect.deletePerson(Integer.parseInt(id));
+            DbConnect.deletePerson(Integer.parseInt(id));
         } catch (SQLException | ClassNotFoundException e) {
             logger.severe("Error deleting user: " + e.getMessage());
             throw new RuntimeException(e);
@@ -146,11 +146,11 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("id", id);
 
         if (role.equals("student")) {
-            Student student = DbConnnect.getStudent(Integer.parseInt(id));
+            Student student = DbConnect.getStudent(Integer.parseInt(id));
             request.setAttribute("student", student);
             request.getRequestDispatcher("/admin/studentForm.jsp").forward(request, response);
         } else if (role.equals("teacher")) {
-            Teacher teacher = DbConnnect.getTeacher(Integer.parseInt(id));
+            Teacher teacher = DbConnect.getTeacher(Integer.parseInt(id));
             request.setAttribute("teacher", teacher);
             request.getRequestDispatcher("/admin/teacherForm.jsp").forward(request, response);
         } else {

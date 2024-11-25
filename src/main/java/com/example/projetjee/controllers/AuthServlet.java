@@ -1,5 +1,6 @@
 package com.example.projetjee.controllers;
 
+import com.example.projetjee.utils.DbConnect;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,8 +9,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.logging.Logger;
-
-import com.example.projetjee.utils.DbConnnect;
 
 public class AuthServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -22,21 +21,21 @@ public class AuthServlet extends HttpServlet {
         logger.info("Request received: username = " + username);
 
         try {
-            if (DbConnnect.alreadyExisteUsername(username)) {
-                int userId = DbConnnect.getUserIdByUsername(username);
+            if (DbConnect.alreadyExisteUsername(username)) {
+                int userId = DbConnect.getUserIdByUsername(username);
                 logger.info("UserID found: " + userId);
 
-                if (DbConnnect.checkPassword(userId, password)) {
+                if (DbConnect.checkPassword(userId, password)) {
                     logger.info("Password OK");
 
                     // Creating a session for the authenticated user
                     HttpSession session = request.getSession();
                     session.setAttribute("userId", userId);
                     session.setAttribute("username", username);
-                    session.setAttribute("role", DbConnnect.getRoleById(userId));
+                    session.setAttribute("role", DbConnect.getRoleById(userId));
                     logger.info("Session created for user: " + username);
 
-                    if (DbConnnect.getRoleById(userId).equals("admin")) {
+                    if (DbConnect.getRoleById(userId).equals("admin")) {
                         logger.info("User is an admin");
                         response.sendRedirect("/ProjetJEE_war_exploded/admin/admin.jsp");
                     }else {

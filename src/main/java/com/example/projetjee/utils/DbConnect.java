@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.example.projetjee.models.*;
 import org.mindrot.jbcrypt.BCrypt;
-public class DbConnnect {
+public class DbConnect {
     private static final String URL = "jdbc:mysql://localhost:3306/projetjeedb";
     private static final String USER = "root";
     private static final String PASSWORD = "cytech0001";
