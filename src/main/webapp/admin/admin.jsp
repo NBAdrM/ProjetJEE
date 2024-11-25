@@ -6,8 +6,8 @@
 <html>
 <head>
     <title>Panneau Administration</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/admin.css">
-    <script src="${pageContext.request.contextPath}/ressources/js/admin.js"></script>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/admin.css">
+    <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
 </head>
 <body>
 <h1>Panneau d'administration</h1>
@@ -42,5 +42,10 @@
     <!-- Les lignes seront ajoutées dynamiquement ici -->
     </tbody>
 </table>
+    <div class="logout">
+        <form action="${pageContext.request.contextPath}/logoutServlet" method="post">
+            <button type="submit">Se déconnecter</button>
+        </form>
+    </div>
 </body>
 </html>

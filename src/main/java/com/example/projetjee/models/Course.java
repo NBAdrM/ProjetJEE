@@ -12,7 +12,7 @@ public class Course {
     private String classroom;
     private String teacherName;
 
-    public Course(int id, String name, int year, int teacherId, String classroom, String teacherName) throws SQLException, ClassNotFoundException {
+    public Course(int id, String name, String classroom) throws SQLException, ClassNotFoundException {
         this.id = id;
         this.name = name;
         this.year = year;

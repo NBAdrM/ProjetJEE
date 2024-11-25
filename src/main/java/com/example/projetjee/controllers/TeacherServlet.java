@@ -46,7 +46,7 @@ public class TeacherServlet extends HttpServlet {
                 int idInt = Integer.parseInt(id);
                 logger.info("Updating student with ID: " + idInt);
 
-                Teacher teacher = new Teacher(idInt, lastName, firstName, email, address, null, null, Boolean.TRUE);
+                Teacher teacher = new Teacher(idInt, firstName, lastName, email, address, null, null, Boolean.TRUE);
                 DbConnnect.updateTeacher(teacher.getId(), teacher.getFirstName(), teacher.getLastName(), teacher.getEmail(), teacher.getEmail(), Boolean.TRUE); // Implémente cette méthode pour mettre à jour en base
 
                 request.setAttribute("success", "Student updated successfully");
@@ -71,7 +71,7 @@ public class TeacherServlet extends HttpServlet {
 
                 request.setAttribute("success", "Teacher created successfully");
                 logger.info("Redirect to admin.jsp");
-                request.getRequestDispatcher("/admin/admin.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/admin/admin.jsp");
             }
         } catch (SQLException | ClassNotFoundException e) {
             logger.severe("SQL Error: " + e.getMessage());

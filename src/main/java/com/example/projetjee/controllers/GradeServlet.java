@@ -1,65 +1,44 @@
 package com.example.projetjee.controllers;
 
 import com.example.projetjee.models.Grade;
+import com.example.projetjee.models.Student;
 import com.example.projetjee.utils.DbConnnect;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class GradeServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(StudentServlet.class.getName());
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String studentId = request.getParameter("studentId");
-        String courseId = request.getParameter("courseId");
-        String courseName = request.getParameter("courseName");
-        String gradeStr = request.getParameter("grade");
 
-        try {
-            double grade = Double.parseDouble(gradeStr);
-
-            // Création de l'objet Grade
-            Grade gradeObj = new Grade(studentId, courseId, courseName, grade);
-
-            //DbConnnect.insertGrade(gradeObj);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String studentId = request.getParameter("studentId");
+        String studentFirstName = request.getParameter("studentFirstName");
+        String studentLastName = request.getParameter("studentLastName");
+        logger.info("request get \nstudentFirstName: " + studentFirstName + "\nstudentLastName: " + studentLastName);
 
         try {
-            // Connexion à la base de données
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_db", "root", "password");
+            List<Student> students = DbConnnect.getStudentsByName(studentLastName, studentFirstName);
+            logger.info("students: " + students);
 
-            String query = "SELECT c.name, g.grade FROM grades g INNER JOIN courses c ON g.course_id = c.id WHERE g.student_id = ?";
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, studentId);
+            request.setAttribute("students", students);
 
-            ResultSet rs = stmt.executeQuery();
+            logger.info("forwarding to gradeEntry.jsp");
+            request.getRequestDispatcher("/grade/gradeEntry.jsp").forward(request, response);
+            ;
 
-            response.setContentType("text/html");
-            response.getWriter().println("<h1>Résultats</h1><ul>");
-
-            while (rs.next()) {
-                String courseName = rs.getString("name");
-                double grade = rs.getDouble("grade");
-                response.getWriter().println("<li>" + courseName + ": " + grade + "</li>");
-            }
-
-            response.getWriter().println("</ul>");
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.getWriter().println("Erreur lors de la consultation des résultats.");
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.severe("Error fetching data: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }
