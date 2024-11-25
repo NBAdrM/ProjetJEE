@@ -70,5 +70,9 @@ public class Course {
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
     }
+
+    public String getName() {
+        return name;
+    }
 }
 
