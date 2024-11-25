@@ -20,5 +20,9 @@ public class Course {
         this.teacherId = teacherId;
         this.teacherName = DbConnnect.getTeacher(teacherId).getLastName();
     }
+
+    public String getName() {
+        return name;
+    }
 }
 
