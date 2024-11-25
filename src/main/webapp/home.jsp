@@ -39,6 +39,7 @@
         <a href="${pageContext.request.contextPath}/grade/gradeEntry.jsp" class="button">Gérer les notes des étudiants</a>
         <a href="${pageContext.request.contextPath}/course/courseCalendar.jsp" class="button">Consulter mon emploi du temps</a>
         <a href="${pageContext.request.contextPath}/course/course.jsp" class="button">Créer un cours</a>
+        <a href="${pageContext.request.contextPath}/student/studentList.jsp" class="button">Liste des étudiants / Rechercher un étudiant</a>
         <% } %>
 
         <div class="logout">

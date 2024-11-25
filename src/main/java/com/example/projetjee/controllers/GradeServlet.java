@@ -1,8 +1,10 @@
 package com.example.projetjee.controllers;
 
+import com.example.projetjee.models.Course;
 import com.example.projetjee.models.Grade;
 import com.example.projetjee.models.Student;
 import com.example.projetjee.utils.DbConnnect;
+import com.google.gson.Gson;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
@@ -17,29 +19,22 @@ public class GradeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String studentFirstName = request.getParameter("studentFirstName");
-        String studentLastName = request.getParameter("studentLastName");
-        logger.info("request get \nstudentFirstName: " + studentFirstName + "\nstudentLastName: " + studentLastName);
-
+        logger.info("GET /grade");
+        int teacherId = (int) request.getSession().getAttribute("userId");
+        logger.info("teacherId: " + teacherId);
         try {
-            List<Student> students = DbConnnect.getStudentsByName(studentLastName, studentFirstName);
-            logger.info("students: " + students);
+            List<Course> courses = DbConnnect.getCoursesByTeacher(teacherId);
+            logger.info("courses: " + courses);
 
-            request.setAttribute("students", students);
-
-            logger.info("forwarding to gradeEntry.jsp");
-            request.getRequestDispatcher("/grade/gradeEntry.jsp").forward(request, response);
-            ;
-
+            String coursesJson = new Gson().toJson(courses);
+            response.getWriter().write(coursesJson);
         } catch (SQLException | ClassNotFoundException e) {
-            logger.severe("Error fetching data: " + e.getMessage());
-            throw new RuntimeException(e);
+            logger.severe("Erreur lors de la récupération des cours : " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erreur lors de la récupération des cours.");
         }
     }
 }
-

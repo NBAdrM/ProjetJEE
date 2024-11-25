@@ -1,7 +1,9 @@
 package com.example.projetjee.controllers;
 
+import com.example.projetjee.utils.DbConnect;
 import com.example.projetjee.models.Course;
-import com.example.projetjee.utils.DbConnnect;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
@@ -40,7 +42,6 @@ public class EnrollmentServlet extends HttpServlet {
             DbConnnect.addStudentFollowCourse(studentId, courseId);
             session.setAttribute("successMessage", "Inscription réussie !");
             response.sendRedirect(request.getContextPath() + "/enrollmentSuccess.jsp");
-
         } catch (NumberFormatException e) {
             logger.warning("Erreur de format : " + e.getMessage());
             session.setAttribute("errorMessage", "L'ID du cours est invalide.");
@@ -62,7 +63,6 @@ public class EnrollmentServlet extends HttpServlet {
             if ("getCoursesAndTeachers".equals(action)) {
                 logger.info("Chargement des cours et des enseignants.");
                 List<Course> courses = DbConnnect.getCourses();
-
                 logger.info("Nombre de cours récupérés : " + courses.size());
                 response.setContentType("application/json");
                 response.getWriter().write(new Gson().toJson(courses));

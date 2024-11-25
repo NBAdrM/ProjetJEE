@@ -1,6 +1,5 @@
 package com.example.projetjee.controllers;
-import com.example.projetjee.models.Student;
-import com.example.projetjee.utils.DbConnnect;
+import com.example.projetjee.utils.DbConnect;
 import com.example.projetjee.utils.UserGenerator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -13,11 +12,11 @@ import java.util.logging.Logger;
 
 
 import com.example.projetjee.models.Teacher;
-import com.example.projetjee.utils.DbConnnect;
 
 public class TeacherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(TeacherServlet.class.getName());
+
     /*
      * This method will be called when an admin will submit the form to create a teacher
      */
@@ -47,7 +46,7 @@ public class TeacherServlet extends HttpServlet {
                 logger.info("Updating student with ID: " + idInt);
 
                 Teacher teacher = new Teacher(idInt, firstName, lastName, email, address, null, null, Boolean.TRUE);
-                DbConnnect.updateTeacher(teacher.getId(), teacher.getFirstName(), teacher.getLastName(), teacher.getEmail(), teacher.getEmail(), Boolean.TRUE); // Implémente cette méthode pour mettre à jour en base
+                DbConnect.updateTeacher(teacher.getId(), teacher.getFirstName(), teacher.getLastName(), teacher.getEmail(), teacher.getEmail(), Boolean.TRUE); // Implémente cette méthode pour mettre à jour en base
 
                 request.setAttribute("success", "Student updated successfully");
             }else {
@@ -62,7 +61,7 @@ public class TeacherServlet extends HttpServlet {
                 logger.info(teacher.toString());
 
                 logger.info("Adding teacher to database");
-                int newId = DbConnnect.addTeacher(teacher.getFirstName(), teacher.getLastName(), teacher.getEmail(), teacher.getAddress(), teacher.getUsername(), teacher.getPassword(), Boolean.TRUE);
+                int newId = DbConnect.addTeacher(teacher.getFirstName(), teacher.getLastName(), teacher.getEmail(), teacher.getAddress(), teacher.getUsername(), teacher.getPassword(), Boolean.TRUE);
                 logger.info("successfully added teacher to the database");
 
                 //Update the id of the teacher
@@ -70,9 +69,11 @@ public class TeacherServlet extends HttpServlet {
                 teacher.setId(newId);
 
                 request.setAttribute("success", "Teacher created successfully");
-                logger.info("Redirect to admin.jsp");
-                response.sendRedirect(request.getContextPath() + "/admin/admin.jsp");
             }
+            // Rediriger vers la page admin
+            logger.info("Redirect to admin.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/admin.jsp");
+
         } catch (SQLException | ClassNotFoundException e) {
             logger.severe("SQL Error: " + e.getMessage());
             throw new RuntimeException(e);
@@ -96,7 +97,7 @@ public class TeacherServlet extends HttpServlet {
 
         if (id.equals("-1")) {
             //Get all teacher in database
-            //DbConnnect.getTeacher()
+            //DbConnect.getTeacher()
             int i = 0;
 
         }else {
