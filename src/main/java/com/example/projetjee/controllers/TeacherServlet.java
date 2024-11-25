@@ -70,9 +70,11 @@ public class TeacherServlet extends HttpServlet {
                 teacher.setId(newId);
 
                 request.setAttribute("success", "Teacher created successfully");
-                logger.info("Redirect to admin.jsp");
-                response.sendRedirect(request.getContextPath() + "/admin/admin.jsp");
             }
+            // Rediriger vers la page admin
+            logger.info("Redirect to admin.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/admin.jsp");
+
         } catch (SQLException | ClassNotFoundException e) {
             logger.severe("SQL Error: " + e.getMessage());
             throw new RuntimeException(e);

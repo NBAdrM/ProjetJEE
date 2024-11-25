@@ -104,10 +104,9 @@ public class CourseServlet extends HttpServlet {
                     String description = resultSet.getString("description");
 
                     // Créer un objet de type Course et le renvoyer en JSON
-                    //TODO modifier la degree l'année et le professeur
-                    Course course = new Course(courseId, name,1, 2024, 1);
+                    //Course course = new Course(courseId, name, degree,teacherId);
                     response.setStatus(HttpServletResponse.SC_OK);
-                    out.print(new Gson().toJson(course));
+                    //out.print(new Gson().toJson(course));
                 } else {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     out.print(new Gson().toJson("Erreur : Cours non trouvé."));

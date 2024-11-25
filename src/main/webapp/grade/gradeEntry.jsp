@@ -19,7 +19,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enregistrement des Notes</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/courseCalendar.css">
+    <script src="${pageContext.request.contextPath}/resources/js/initCourseByTeacher.js"></script>
 </head>
+
 <body>
 
 <header>
@@ -42,68 +44,16 @@
 <div class="main-content">
     <h1>Enregistrer les Notes</h1>
 
-    <div class="search-bar">
-        <form action="<%= request.getContextPath() %>/grade" method="get">
-            <h1>Rechercher un étudiant</h1>
-            <label for="studentLastName">Nom de famille:</label>
-            <input type="text" id="studentLastName" name="studentLastName" placeholder="Nom de famille">
+    <form action="<%= request.getContextPath() %>/grade" method="post">
+        <label for="course">Choisissez un cours :</label>
+        <select id="course" name="courseId">
+            <c:forEach var="course" items="${courses}">
+                <option value="${course.id}">${course.name} - ${course.year} - ${course.classroom}</option>
+            </c:forEach>
+        </select>
+        <br>
 
-            <label for="studentFirstName">Prénom:</label>
-            <input type="text" id="studentFirstName" name="studentFirstName" placeholder="Prénom">
-
-
-            <button type="submit">Rechercher</button>
-        </form>
-    </div>
-
-    <div class="student-results">
-        <h2>Résultats de la recherche :</h2>
-        <c:if test="${not empty students}">
-            <table border="1">
-                <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="student" items="${students}">
-                    <tr>
-                        <td>${student.lastName}</td>
-                        <td>${student.firstName}</td>
-                        <td>
-                            <form action="<%= request.getContextPath() %>/grade" method="post">
-                                <input type="hidden" name="studentId" value="${student.id}">
-                                <button type="submit">Sélectionner</button>
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </c:if>
-        <c:if test="${empty students}">
-            <p>Aucun étudiant trouvé.</p>
-        </c:if>
-    </div>
-
-    <div>
-        <label for="courseId">ID du Cours:</label>
-        <input type="text" id="courseId" name="courseId" required>
-    </div>
-
-    <div>
-        <label for="courseName">Nom du Cours:</label>
-        <input type="text" id="courseName" name="courseName" required>
-    </div>
-
-    <div>
-        <label for="grade">Note:</label>
-        <input type="number" id="grade" name="grade" min="0" max="20" step="0.1" required>
-    </div>
-
-    <button type="submit">Enregistrer</button>
+        <button type="submit">Enregistrer</button>
     </form>
 </div>
 
