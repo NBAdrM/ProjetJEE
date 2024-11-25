@@ -547,9 +547,9 @@ public class DbConnnect {
             int id = rs.getInt("id");
             String name = rs.getString("name");
             int year = rs.getInt("year");
-            String classroom = rs.getString("classroom");
+            int degree = rs.getInt("degree");
 
-            courses.add(new Course(id, name, year, teacherId, classroom));
+            courses.add(new Course(id, name, degree,year, teacherId));
         }
 
         stmt.close();

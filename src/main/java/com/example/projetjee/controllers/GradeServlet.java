@@ -27,14 +27,11 @@ public class GradeServlet extends HttpServlet {
         int teacherId = (int) request.getSession().getAttribute("userId");
         logger.info("teacherId: " + teacherId);
         try {
-
             List<Course> courses = DbConnnect.getCoursesByTeacher(teacherId);
             logger.info("courses: " + courses);
 
             String coursesJson = new Gson().toJson(courses);
             response.getWriter().write(coursesJson);
-            // Forward vers la page JSP
-            request.getRequestDispatcher("/gradeEntry.jsp").forward(request, response);
         } catch (SQLException | ClassNotFoundException e) {
             logger.severe("Erreur lors de la récupération des cours : " + e.getMessage());
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erreur lors de la récupération des cours.");

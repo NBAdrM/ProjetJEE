@@ -92,6 +92,32 @@ public class CourseServlet extends HttpServlet {
                 out.print(new Gson().toJson("Erreur : L'ID du cours doit être un entier."));
                 return;
             }
+
+            String query = "SELECT * FROM courses WHERE id = ?";
+            try (Connection connection = DbConnnect.initializeDatabase();
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, courseId);
+                ResultSet resultSet = statement.executeQuery();
+
+                if (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    String description = resultSet.getString("description");
+
+                    // Créer un objet de type Course et le renvoyer en JSON
+                    //Course course = new Course(courseId, name, degree,teacherId);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    //out.print(new Gson().toJson(course));
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    out.print(new Gson().toJson("Erreur : Cours non trouvé."));
+                }
+            } catch (SQLException e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.print(new Gson().toJson("Erreur de la base de données : " + e.getMessage()));
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
