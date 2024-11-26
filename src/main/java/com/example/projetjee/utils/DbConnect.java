@@ -549,7 +549,7 @@ public class DbConnect {
             int year = rs.getInt("year");
             int degree = rs.getInt("degree");
 
-            courses.add(new Course(id, name, degree,year, teacherId));
+            courses.add(new Course(id, name,year, teacherId));
         }
 
         stmt.close();
@@ -612,6 +612,23 @@ public class DbConnect {
         stmt.close();
         conn.close();
         return grades;
+    }
+    public static List<Course> getCourses() throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+        String query = "SELECT * FROM Course";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        ResultSet rs = stmt.executeQuery();
+        List<Course> courses = new ArrayList<>();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            int year = rs.getInt("year");
+            int teacherId = rs.getInt("Teacher_Person_id");
+            courses.add(new Course(id, name, year, teacherId));
+        }
+        stmt.close();
+        conn.close();
+        return courses;
     }
 
     public static List<StudentCourse> getStudentCourses(int studentId) throws SQLException, ClassNotFoundException {
