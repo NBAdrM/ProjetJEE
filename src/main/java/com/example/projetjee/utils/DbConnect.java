@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.example.projetjee.models.*;
 import org.mindrot.jbcrypt.BCrypt;
-public class DbConnnect {
+public class DbConnect {
     private static final String URL = "jdbc:mysql://localhost:3306/projetjeedb";
     private static final String USER = "root";
     private static final String PASSWORD = "cytech0001";
@@ -526,31 +526,6 @@ public class DbConnnect {
         return generatedId;
     }
 
-    public static List<Course> getCourses() throws SQLException, ClassNotFoundException {
-        Connection conn = initializeDatabase();
-
-        String query = "SELECT * FROM Course";
-
-        PreparedStatement stmt = conn.prepareStatement(query);
-
-        ResultSet rs = stmt.executeQuery();
-        List<Course> courses = new ArrayList<>();
-
-        while (rs.next()) {
-            int id = rs.getInt("id");
-            String name = rs.getString("name");
-            int degree = rs.getInt("degree");
-            int year = rs.getInt("year");
-            int teacherId = rs.getInt("Teacher_Person_id");
-
-            courses.add(new Course(id, name,degree, year, teacherId));
-        }
-
-        stmt.close();
-        conn.close();
-        return courses;
-    }
-
     public static List<Student> getStudentsByName(String lastName,String firstName) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 
@@ -581,6 +556,32 @@ public class DbConnnect {
         stmt.close();
         conn.close();
         return students;
+    }
+
+    public static List<Course> getCoursesByTeacher(int teacherId) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Course WHERE Teacher_Person_id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, teacherId);
+
+        ResultSet rs = stmt.executeQuery();
+        List<Course> courses = new ArrayList<>();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            int year = rs.getInt("year");
+            int degree = rs.getInt("degree");
+
+            courses.add(new Course(id, name,year, teacherId));
+        }
+
+        stmt.close();
+        conn.close();
+        return courses;
     }
 
     public static void addStudentFollowCourse(int studentId,int courseId) throws SQLException, ClassNotFoundException {
@@ -638,6 +639,23 @@ public class DbConnnect {
         stmt.close();
         conn.close();
         return grades;
+    }
+    public static List<Course> getCourses() throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+        String query = "SELECT * FROM Course";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        ResultSet rs = stmt.executeQuery();
+        List<Course> courses = new ArrayList<>();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            int year = rs.getInt("year");
+            int teacherId = rs.getInt("Teacher_Person_id");
+            courses.add(new Course(id, name, year, teacherId));
+        }
+        stmt.close();
+        conn.close();
+        return courses;
     }
 
     public static List<Grade> getGradesByYear(int studentId, int courseId,int year) throws SQLException, ClassNotFoundException {

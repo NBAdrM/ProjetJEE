@@ -19,7 +19,7 @@ public class UserGenerator {
 
         int i = 1;
         // Check if the username already exists
-        while (DbConnnect.alreadyExisteUsername(username)) {
+        while (DbConnect.alreadyExisteUsername(username)) {
             username = baseUsername + i;
             i++;
         }
