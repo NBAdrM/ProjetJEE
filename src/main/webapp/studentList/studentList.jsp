@@ -61,7 +61,7 @@
                         <td>${student.lastName}</td>
                         <td>${student.firstName}</td>
                         <td>
-                            <form action="<%= request.getContextPath() %>/studentList" method="details">
+                            <form action="<%= request.getContextPath() %>/studentList/studentDetails.jsp" method="post">
                                 <input type="hidden" name="studentId" value="${student.id}">
                                 <button type="submit">Afficher les détails</button>
                             </form>
