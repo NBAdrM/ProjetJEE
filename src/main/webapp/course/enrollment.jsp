@@ -11,16 +11,7 @@
 <body>
 <h1>Inscription à un Cours</h1>
 
-<%-- Affichage des messages d'erreur ou de succès --%>
-<div id="messageContainer">
-  <% if (session.getAttribute("errorMessage") != null) { %>
-  <p style="color: red;"><%= session.getAttribute("errorMessage") %></p>
-  <% session.removeAttribute("errorMessage"); %>
-  <% } else if (session.getAttribute("successMessage") != null) { %>
-  <p style="color: green;"><%= session.getAttribute("successMessage") %></p>
-  <% session.removeAttribute("successMessage"); %>
-  <% } %>
-</div>
+<div id="messageContainer" style="display: none;"></div>
 
 <form id="enrollForm" method="post" action="${pageContext.request.contextPath}/enrollment">
   <label for="courseId">Choisissez un cours :</label>
