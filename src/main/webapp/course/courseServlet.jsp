@@ -10,6 +10,9 @@
 <!-- Section pour charger tous les cours -->
 <div>
     <h2>Liste des Cours</h2>
+    <form action="<%= request.getContextPath()%>/course" action="get">
+
+    </form>
     <button id="loadCoursesButton">Charger tous les cours</button>
     <div id="allCoursesList">
         <%-- L'endroit où la liste des cours sera affichée --%>
