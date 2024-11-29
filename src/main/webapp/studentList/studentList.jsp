@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des étudiants</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ressources/courseCalendar.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/courseCalendar.css">
 </head>
 <body>
 
@@ -61,7 +61,7 @@
                         <td>${student.lastName}</td>
                         <td>${student.firstName}</td>
                         <td>
-                            <form action="<%= request.getContextPath() %>/studentList" method="details">
+                            <form action="<%= request.getContextPath() %>/studentList" method="post">
                                 <input type="hidden" name="studentId" value="${student.id}">
                                 <button type="submit">Afficher les détails</button>
                             </form>

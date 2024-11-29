@@ -12,13 +12,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.example.projetjee.utils.DbConnnect.*;
+import static com.example.projetjee.utils.DbConnect.*;
 
 public class PdfGenerator {
     public static void generatBulltin(int id,int year) throws SQLException, ClassNotFoundException {
 
-        List<StudentCourse> studentCourses = DbConnnect.getStudentCoursesByYear(id,year);
-        Student student = DbConnnect.getStudent(id);
+        List<StudentCourse> studentCourses = DbConnect.getStudentCoursesByYear(id,year);
+        Student student = DbConnect.getStudent(id);
 
         String dest = "BULLTIN_"+student.getFirstName().toUpperCase()+"_"+student.getLastName().toUpperCase()+"_"+year+"_"+(year+1)+".pdf";
 
@@ -96,7 +96,7 @@ public class PdfGenerator {
                         contentStream.beginText();
                         contentStream.setLeading(14.5f);
                         contentStream.newLineAtOffset(xgrade, yline);
-                        contentStream.showText(getCourseById(sc.getCourseId()).getName());
+                        contentStream.showText(DbConnect.getCourseById(sc.getCourseId()).getName());
                         contentStream.endText();
 
                         contentStream.setFont(PDType1Font.HELVETICA, 12);
