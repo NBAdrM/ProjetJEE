@@ -1,3 +1,5 @@
+<%@ page import="com.example.projetjee.models.DateCourse" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -13,6 +15,8 @@
 
     // Définir une classe CSS différente selon le rôle
     String roleClass = "student".equals(role) ? "background-student" : "background-teacher";
+    List<DateCourse> dateCourse = (List<DateCourse>) request.getAttribute("dateCourse");
+    boolean hasCourses = dateCourse != null && !dateCourse.isEmpty();
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -69,23 +73,30 @@
 
 <script>
     $(document).ready(function() {
-        var events = [
-            <c:forEach var="course" items="${listCourses}">
-            {
-                title: "${course.name} \n Professeur: ${course.teacherName} \n Salle: ${course.classroom}",
-                start: '${course.dateCourse.date}T${course.dateCourse.startTime}',  // Date et heure de début
-                end: '${course.dateCourse.date}T${course.dateCourse.endTime}',      // Date et heure de fin
-                description: 'Enseignant: ${course.teacherName}, Salle: ${course.classroom}' // Description complète
-            },
-            </c:forEach>
-        ];
+        // Générer le tableau `events` côté serveur en JSON
+        var events = <%= hasCourses ? "[" : "[]" %>
+                <% if (hasCourses) { %>
+                <% for (DateCourse course : dateCourse) { %>
+                {
+                    title: "<%= course.getId() %> \n Salle: <%= course.getClassroom() %>",
+                    start: '<%= course.getDate() %>T<%= course.getStartTime() %>',  // Date et heure de début
+                    end: '<%= course.getDate() %>T<%= course.getEndTime() %>',      // Date et heure de fin
+                    description: 'Salle: <%= course.getClassroom() %>' // Description complète
+                }<% if (dateCourse.indexOf(course) != dateCourse.size() - 1) { %>,<% } %>
+            <% } %>
+            <% } %>
+            <%= hasCourses ? "]" : "" %>;
 
         // Vérification dans la console pour debug
-        <c:forEach var="course" items="${listCourses}">
-        console.log("Date: ${course.dateCourse.date}");
-        console.log("Heure début: ${course.dateCourse.startTime}");
-        console.log("Heure fin: ${course.dateCourse.endTime}");
-        </c:forEach>;
+        <% if (hasCourses) { %>
+        <% for (DateCourse course : dateCourse) { %>
+        console.log("Date: <%= course.getDate() %>");
+        console.log("Heure début: <%= course.getStartTime() %>");
+        console.log("Heure fin: <%= course.getEndTime() %>");
+        <% } %>
+        <% } else { %>
+        console.log("Aucun cours disponible.");
+        <% } %>
 
         $('#calendar').fullCalendar({
             header: {
@@ -95,7 +106,7 @@
             },
             defaultView: 'agendaWeek',
             editable: false,
-            events: events,
+            events: events, // Utilisation du tableau sécurisé
             minTime: "08:00:00",
             maxTime: "20:00:00",
             validRange: {
