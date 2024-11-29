@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -20,7 +21,12 @@ public class PdfGenerator {
         List<StudentCourse> studentCourses = DbConnect.getStudentCoursesByYear(id,year);
         Student student = DbConnect.getStudent(id);
 
-        String dest = "BULLTIN_"+student.getFirstName().toUpperCase()+"_"+student.getLastName().toUpperCase()+"_"+year+"_"+(year+1)+".pdf";
+        File directory = new File("src/main/webapp/tmp");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        String dest = "src/main/webapp/tmp/BULLTIN_"+student.getFirstName().toUpperCase()+"_"+student.getLastName().toUpperCase()+"_"+year+"_"+(year+1)+".pdf";
 
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage();
@@ -133,6 +139,15 @@ public class PdfGenerator {
             document.save(dest);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void supBulltin(){
+        File directory = new File("src/main/webapp/tmp");
+        if (directory.exists()) {
+            for (File file : directory.listFiles()) {
+                file.delete();
+            }
         }
     }
 }
