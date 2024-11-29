@@ -30,7 +30,7 @@ public class StudentListServlet extends HttpServlet {
             logger.info("student :" + student);
 
             request.getSession().setAttribute("student", student);
-            request.getRequestDispatcher("/studentDetails.jsp").forward(request,response);
+            request.getRequestDispatcher("studentList/studentDetails.jsp").forward(request,response);
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

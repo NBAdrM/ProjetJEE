@@ -43,8 +43,8 @@
 
 <div class="main-content">
     <h1>Enregistrer les Notes</h1>
-
-    <form action="<%= request.getContextPath() %>/grade/gradeEntry2.jsp" method="post">
+    <% request.getSession().setAttribute("sourcePage", "gradeEntry.jsp"); %>
+    <form action="<%= request.getContextPath() %>/grade" method="post">
         <label for="course">Choisissez un cours :</label>
         <select id="course" name="courseId">
             <c:forEach var="course" items="${courses}">
@@ -52,6 +52,7 @@
             </c:forEach>
         </select>
         <br>
+
 
         <button type="submit">Enregistrer</button>
     </form>

@@ -660,7 +660,7 @@ public class DbConnect {
     public static List<Student> getStudentsByCourse(int courseId) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 
-        String query = "SELECT * FROM Student AS s INNER JOIN Student_has_course AS s_a_c ON s.id=s_a_c.Student_id WHERE s_a_c.id = ?";
+        String query = "SELECT * FROM Person AS p INNER JOIN Student as s ON p.id = s.id INNER JOIN Student_has_course AS s_a_c ON p.id=s_a_c.Student_id INNER JOIN course as c ON c.id=s_a_c.course_id WHERE s_a_c.course_id = ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
 
@@ -687,4 +687,86 @@ public class DbConnect {
         conn.close();
         return students;
     }
+
+    public static Course getCourseById(int id) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Course WHERE id = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+
+        Course course = null;
+        if (rs.next()) {
+            String name = rs.getString("name");
+            int year = rs.getInt("year");
+            int degree = rs.getInt("degree");
+            int teacherId = rs.getInt("Teacher_Person_id");
+
+            course = new Course(id, name, year, teacherId);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return course;
+    }
+
+    public static List<Grade> getGradesByYear(int studentId, int courseId,int year) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Garde_of_Student WHERE student_course_id_student = ? AND student_course_id_course = ? AND date < ? AND date > ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, studentId);
+        stmt.setInt(2, courseId);
+        stmt.setString(3, (year+1)+"-08-31");
+        stmt.setString(4, year+"-09-01");
+
+        ResultSet rs = stmt.executeQuery();
+        List<Grade> grades = new ArrayList<>();
+
+        while (rs.next()) {
+            int grade = rs.getInt("grade");
+            String date = rs.getString("date");
+
+            grades.add(new Grade(grade, date));
+        }
+
+        stmt.close();
+        conn.close();
+        return grades;
+    }
+
+    public static List<StudentCourse> getStudentCoursesByYear(int studentId,int year) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Student_has_Course AS shc INNER JOIN Course AS c ON c.id=shc.course_id AND c.year=? WHERE Student_id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, year);
+        stmt.setInt(2, studentId);
+
+        ResultSet rs = stmt.executeQuery();
+        List<StudentCourse> studentCourses = new ArrayList<>();
+
+        while (rs.next()) {
+            int courseId = rs.getInt("course_id");
+
+            List<Grade> grades = null;
+            grades = getGradesByYear(studentId, courseId,year);
+
+            studentCourses.add(new StudentCourse(courseId, studentId, grades));
+        }
+
+        stmt.close();
+        conn.close();
+        return studentCourses;
+    }
+
 }

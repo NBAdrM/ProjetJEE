@@ -18,7 +18,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enregistrement des Notes</title>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/courseCalendar.css">
-  <script src="${pageContext.request.contextPath}/resources/js/initCourseByTeacher.js"></script>
 </head>
 
 <body>
@@ -42,7 +41,8 @@
 
 <div class="main-content">
   <h1>Enregistrer les notes</h1>
-
+  <% request.getSession().setAttribute("sourcePage", "gradeEntry2.jsp");
+  System.out.println(request.getSession().getAttribute("students"));%>
   <form action="<%= request.getContextPath() %>/grade" method="post">
     <label for="student">Choisissez un élève :</label>
     <select id="student" name="studentId">
