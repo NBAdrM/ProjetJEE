@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -27,26 +28,47 @@ public class CalendarServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         try {
-            List<DateCourse> dateCourse = null;
+            List<DateCourseDetail> detailedCourses = new ArrayList<>();
             if (role.equals("student")){
                 List<StudentCourse> studentCourses = DbConnect.getStudentCourses(userId);
                 logger.info("studentCourses: " + studentCourses);
                 for(StudentCourse studentCourse : studentCourses) {
-                    dateCourse = DbConnect.getDateCourse(studentCourse.getCourseId());
-                    logger.info("dateCourse: " + dateCourse);
+                    List<DateCourse> newDateCourses = DbConnect.getDateCourse(studentCourse.getCourseId());
+                    Course course = DbConnect.getCourseById(studentCourse.getCourseId());
+                    String courseName = course.getName();
+                    String courseTeacher = course.getTeacherName();
+                    logger.info("dateCourse: " + newDateCourses);
+                    if (newDateCourses != null && !newDateCourses.isEmpty()) {
+                        for (DateCourse dateCourse : newDateCourses) {
+                            detailedCourses.add(new DateCourseDetail(dateCourse, courseName, courseTeacher));
+                        }
+                    } else {
+                        logger.info("Aucun cours trouvé pour l'étudiant");
+                    }
                 }
             } else if (role.equals("teacher")) {
                 List<Course> teacherCourses = DbConnect.getCoursesByTeacher(userId);
                 logger.info("teacherCourses: " + teacherCourses);
                 for(Course teacherCourse : teacherCourses) {
-                    dateCourse = DbConnect.getDateCourse(teacherCourse.getId());
-                    logger.info("dateCourse: " + dateCourse);
+                    List<DateCourse> newDateCourses = DbConnect.getDateCourse(teacherCourse.getId());
+                    String courseName = teacherCourse.getName();
+                    String courseTeacher = teacherCourse.getTeacherName();
+                    logger.info("dateCourse: " + newDateCourses);
+
+                    if (newDateCourses != null && !newDateCourses.isEmpty()) {
+                        for (DateCourse dateCourse : newDateCourses) {
+                            detailedCourses.add(new DateCourseDetail(dateCourse, courseName, courseTeacher));
+                        }
+                    } else {
+                        logger.info("Aucun cours trouvé pour l'enseignant");
+                    }
                 }
             } else {
                 logger.severe("Erreur lors de la récupération des cours : role inconnu");
                 }
 
-            request.setAttribute("dateCourse", dateCourse);
+            logger.info("detailedCourses: " + detailedCourses);
+            request.setAttribute("detailedCourse", detailedCourses);
             request.getRequestDispatcher("/course/courseCalendar.jsp").forward(request, response);
         } catch (Exception e) {
             logger.severe("Erreur lors de la récupération des cours : " + e.getMessage());

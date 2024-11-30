@@ -1,5 +1,6 @@
 <%@ page import="com.example.projetjee.models.DateCourse" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.example.projetjee.models.DateCourseDetail" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -15,7 +16,7 @@
 
     // Définir une classe CSS différente selon le rôle
     String roleClass = "student".equals(role) ? "background-student" : "background-teacher";
-    List<DateCourse> dateCourse = (List<DateCourse>) request.getAttribute("dateCourse");
+    List<DateCourseDetail> dateCourse = (List<DateCourseDetail>) request.getAttribute("detailedCourse");
     boolean hasCourses = dateCourse != null && !dateCourse.isEmpty();
 %>
 <!DOCTYPE html>
@@ -76,12 +77,12 @@
         // Générer le tableau `events` côté serveur en JSON
         var events = <%= hasCourses ? "[" : "[]" %>
                 <% if (hasCourses) { %>
-                <% for (DateCourse course : dateCourse) { %>
+                <% for (DateCourseDetail course : dateCourse) { %>
                 {
-                    title: "<%= course.getId() %> \n Salle: <%= course.getClassroom() %>",
-                    start: '<%= course.getDate() %>T<%= course.getStartTime() %>',  // Date et heure de début
-                    end: '<%= course.getDate() %>T<%= course.getEndTime() %>',      // Date et heure de fin
-                    description: 'Salle: <%= course.getClassroom() %>' // Description complète
+                    title: "<%= course.getCourseName() %> \n Salle: <%= course.getDateCourse().getClassroom() %> \n Professeur: <%= course.getTeacherName() %>", // Nom du cours
+                    start: '<%= course.getDateCourse().getDate() %>T<%= course.getDateCourse().getStartTime() %>',  // Date et heure de début
+                    end: '<%= course.getDateCourse().getDate() %>T<%= course.getDateCourse().getEndTime() %>',      // Date et heure de fin
+                    description: 'Salle: <%= course.getDateCourse().getClassroom() %>' // Description complète
                 }<% if (dateCourse.indexOf(course) != dateCourse.size() - 1) { %>,<% } %>
             <% } %>
             <% } %>
@@ -89,10 +90,10 @@
 
         // Vérification dans la console pour debug
         <% if (hasCourses) { %>
-        <% for (DateCourse course : dateCourse) { %>
-        console.log("Date: <%= course.getDate() %>");
-        console.log("Heure début: <%= course.getStartTime() %>");
-        console.log("Heure fin: <%= course.getEndTime() %>");
+        <% for (DateCourseDetail course : dateCourse) { %>
+        console.log("Date: <%= course.getDateCourse().getDate() %>");
+        console.log("Heure début: <%= course.getDateCourse().getStartTime() %>");
+        console.log("Heure fin: <%= course.getDateCourse().getEndTime() %>");
         <% } %>
         <% } else { %>
         console.log("Aucun cours disponible.");
