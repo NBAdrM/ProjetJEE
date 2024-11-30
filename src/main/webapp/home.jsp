@@ -32,7 +32,7 @@
 
     <div class="button-container">
         <% if ("student".equals(role)) { %>
-        <a href="studentGrades.jsp" class="button">Consulter mes notes</a>
+        <a href="${pageContext.request.contextPath}/grade/courseList.jsp" class="button">Consulter mes notes</a>
         <a href="${pageContext.request.contextPath}/course/courseCalendar.jsp" class="button">Consulter mon emploi du temps</a>
         <a href="${pageContext.request.contextPath}/course/enrollment.jsp" class="button">M'inscrire à un cours</a>
         <% } else if ("teacher".equals(role)) { %>

@@ -19,6 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enregistrement des Notes</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/courseCalendar.css">
+    <script src="${pageContext.request.contextPath}/resources/js/initCourseByStudent.js "></script>
 </head>
 
 <body>
@@ -40,41 +41,20 @@
     </nav>
 </header>
 
-
 <div class="main-content">
-    <h1>Liste des notes</h1>
+    <h1>Enregistrer les Notes</h1>
+    <form action="<%= request.getContextPath() %>/gradeCourseList" method="post">
+        <label for="course">Choisissez un cours :</label>
+        <select id="course" name="courseId">
+            <c:forEach var="course" items="${courses}">
+                <option value="${course.id}">${course.name} - ${course.year} - ${course.classroom}</option>
+            </c:forEach>
+        </select>
+        <br>
 
-    <div class="grade-results">
-        <c:if test="${not empty grades}">
-            <table border="1">
-                <thead>
-                <tr>
-                    <th>Matière</th>
-                    <th>Note</th>
-                    <th>Random</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="student" items="${students}">
-                    <tr>
-                        <td>${student.lastName}</td>
-                        <td>${student.firstName}</td>
-                        <td>
-                            <form action="<%= request.getContextPath() %>/studentList" method="post">
-                                <input type="hidden" name="studentId" value="${student.id}">
-                                <button type="submit">Afficher les détails</button>
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </c:if>
-        <c:if test="${empty students}">
-            <p>Aucun étudiant trouvé.</p>
-        </c:if>
-    </div>
 
+        <button type="submit">Enregistrer</button>
+    </form>
 </div>
 
 </body>
