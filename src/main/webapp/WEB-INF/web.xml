@@ -129,5 +129,16 @@
         <url-pattern>/studentList</url-pattern>
     </servlet-mapping>
 
+    <!-- GradeCourseListServlet-->
+    <servlet>
+        <servlet-name>GradeCourseListServlet</servlet-name>
+        <servlet-class>com.example.projetjee.controllers.GradeCourseListServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>GradeCourseListServlet</servlet-name>
+        <url-pattern>/gradeCourseList</url-pattern>
+    </servlet-mapping>
+
 </web-app>
 
