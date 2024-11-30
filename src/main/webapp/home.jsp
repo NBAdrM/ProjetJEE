@@ -32,12 +32,12 @@
 
     <div class="button-container">
         <% if ("student".equals(role)) { %>
-        <a href="${pageContext.request.contextPath}/grade/courseList.jsp" class="button">Consulter mes notes</a>
-        <a href="${pageContext.request.contextPath}/course/courseCalendar.jsp" class="button">Consulter mon emploi du temps</a>
+        <a href="studentGrades.jsp" class="button">Consulter mes notes</a>
+        <a href="${pageContext.request.contextPath}/calendarServlet" class="button">Consulter mon emploi du temps</a>
         <a href="${pageContext.request.contextPath}/course/enrollment.jsp" class="button">M'inscrire à un cours</a>
         <% } else if ("teacher".equals(role)) { %>
         <a href="${pageContext.request.contextPath}/grade/gradeEntry.jsp" class="button">Gérer les notes des étudiants</a>
-        <a href="${pageContext.request.contextPath}/course/courseCalendar.jsp" class="button">Consulter mon emploi du temps</a>
+        <a href="${pageContext.request.contextPath}/calendarServlet" class="button">Consulter mon emploi du temps</a>
         <a href="${pageContext.request.contextPath}/course/courseServlet.jsp" class="button">Créer un cours</a>
         <a href="${pageContext.request.contextPath}/studentList/studentList.jsp" class="button">Liste des étudiants / Rechercher un étudiant</a>
         <% } %>

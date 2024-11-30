@@ -795,4 +795,30 @@ public class DbConnect {
         return studentCourses;
     }
 
+    public static List<DateCourse> getDateCourse(int id) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Date_Course WHERE Course_id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+        List<DateCourse> dateCourses = new ArrayList<>();
+
+        while (rs.next()) {
+            int idd = rs.getInt("id");
+            String dateString = rs.getString("date");
+            String startTime = rs.getString("start_time");
+            String endTime = rs.getString("end_time");
+            String classroom = rs.getString("classroom");
+            Date date = Date.valueOf(dateString);
+            dateCourses.add(new DateCourse(idd, id, date, classroom, startTime, endTime));
+        }
+
+        stmt.close();
+        conn.close();
+        return dateCourses;
+    }
 }
