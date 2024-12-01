@@ -557,6 +557,32 @@ public class DbConnect {
         return courses;
     }
 
+    public static List<Course> getCoursesByStudent(int studentId) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Course AS c INNER JOIN student_has_course as s_a_c ON s_a_c.course_id = c.id WHERE Student_id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, studentId);
+
+        ResultSet rs = stmt.executeQuery();
+        List<Course> courses = new ArrayList<>();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            int year = rs.getInt("year");
+            int teacherId = rs.getInt("Teacher_Person_id");
+
+            courses.add(new Course(id, name, year, teacherId));
+        }
+
+        stmt.close();
+        conn.close();
+        return courses;
+    }
+
     public static void addStudentFollowCourse(int studentId, int courseId) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 
@@ -769,4 +795,30 @@ public class DbConnect {
         return studentCourses;
     }
 
+    public static List<DateCourse> getDateCourse(int id) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Date_Course WHERE Course_id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+        List<DateCourse> dateCourses = new ArrayList<>();
+
+        while (rs.next()) {
+            int idd = rs.getInt("id");
+            String dateString = rs.getString("date");
+            String startTime = rs.getString("start_time");
+            String endTime = rs.getString("end_time");
+            String classroom = rs.getString("classroom");
+            Date date = Date.valueOf(dateString);
+            dateCourses.add(new DateCourse(idd, id, date, classroom, startTime, endTime));
+        }
+
+        stmt.close();
+        conn.close();
+        return dateCourses;
+    }
 }
