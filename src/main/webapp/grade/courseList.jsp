@@ -42,9 +42,9 @@
 </header>
 
 <div class="main-content">
-    <h1>Enregistrer les Notes</h1>
+    <h1>Liste des cours</h1>
     <form action="<%= request.getContextPath() %>/gradeCourseList" method="post">
-        <label for="course">Choisissez un cours :</label>
+        <label for="course">Choisissez le cours dont vous voulez les notes:</label>
         <select id="course" name="courseId">
             <c:forEach var="course" items="${courses}">
                 <option value="${course.id}">${course.name} - ${course.year} - ${course.classroom}</option>
@@ -53,7 +53,7 @@
         <br>
 
 
-        <button type="submit">Enregistrer</button>
+        <button type="submit">Consulter les notes</button>
     </form>
 </div>
 
