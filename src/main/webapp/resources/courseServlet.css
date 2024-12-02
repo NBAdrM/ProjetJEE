@@ -1,0 +1,101 @@
+body {
+    font-family: Helvetica, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #5982C2;
+}
+
+.panel {
+    margin: 20px auto;
+    max-width: 600px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.panel-header {
+    padding: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #5982C2;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+}
+
+.panel-content {
+    padding: 20px;
+    display: none;
+    overflow: hidden;
+    border-top: 1px solid #ccc;
+    border-radius: 0 0 8px 8px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #5982C2;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2e4bb6;
+}
+
+.error-bar {
+    display: none;
+    padding: 10px;
+    background-color: #f44336;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.back-button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#backButton {
+    padding: 10px 20px;
+    background-color: #5982C2;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#backButton:hover {
+    background-color: #2e4bb6;
+}
