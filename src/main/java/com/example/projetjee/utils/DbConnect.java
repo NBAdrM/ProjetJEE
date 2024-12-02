@@ -531,6 +531,37 @@ public class DbConnect {
         return students;
     }
 
+    public static List<Teacher> getTeachersByName(String lastName, String firstName) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Teacher AS t INNER JOIN Person AS p ON t.id=p.id WHERE p.last_name LIKE ? OR p.first_name LIKE ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setString(1, lastName);
+        stmt.setString(2, firstName);
+
+        ResultSet rs = stmt.executeQuery();
+        List<Teacher> teachers = new ArrayList<>();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String firstname = rs.getString("first_name");
+            String lastname = rs.getString("last_name");
+            String email = rs.getString("email");
+            String address = rs.getString("address");
+            String username = rs.getString("username");
+            String password = rs.getString("password");
+            Boolean active = rs.getBoolean("active");
+
+            teachers.add(new Teacher(id, firstname, lastname, email, address, null, null, active));
+        }
+
+        stmt.close();
+        conn.close();
+        return teachers;
+    }
+
     public static List<Course> getCoursesByTeacher(int teacherId) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 

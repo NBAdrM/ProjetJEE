@@ -40,6 +40,7 @@
         <a href="${pageContext.request.contextPath}/calendarServlet" class="button">Consulter mon emploi du temps</a>
         <a href="${pageContext.request.contextPath}/course/courseServlet.jsp" class="button">Créer un cours</a>
         <a href="${pageContext.request.contextPath}/studentList/studentList.jsp" class="button">Liste des étudiants / Rechercher un étudiant</a>
+        <a href="${pageContext.request.contextPath}/teacher/teacherList.jsp" class="button">Liste des enseignants / Rechercher un enseignant</a>
         <% } %>
 
         <div class="logout">
