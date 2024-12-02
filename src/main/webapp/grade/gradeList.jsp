@@ -56,12 +56,14 @@
                 <tbody>
                 <c:forEach var="grade" items="${grades}">
                     <tr>
-                        <td>${grade.grade}</td>
-                        <td>${grade.date}</td>
+                        <td>${grade.getGrade()}</td>
+                        <td>${grade.getDate()}</td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
+            <p>Moyenne : ${average}</p>
+            <label
         </c:if>
     </div>
 
