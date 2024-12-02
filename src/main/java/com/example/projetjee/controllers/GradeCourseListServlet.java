@@ -35,7 +35,14 @@ public class GradeCourseListServlet extends HttpServlet {
             try {
                 List<Grade> grades = DbConnect.getGrades(studentId, courseId);
                 logger.info("grades :" + grades);
-
+                int gradeSum = 0;
+                int gradeNum = 0;
+                for (Grade grade : grades){
+                    gradeSum+=grade.getGrade();
+                    gradeNum++;
+                }
+                int average = gradeSum/gradeNum;
+                request.getSession().setAttribute("average", average);
                 request.getSession().setAttribute("grades", grades);
             } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
