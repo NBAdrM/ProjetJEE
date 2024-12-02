@@ -49,29 +49,19 @@
             <table border="1">
                 <thead>
                 <tr>
-                    <th>Matière</th>
                     <th>Note</th>
-                    <th>Random</th>
+                    <th>Date</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="student" items="${students}">
+                <c:forEach var="grade" items="${grades}">
                     <tr>
-                        <td>${student.lastName}</td>
-                        <td>${student.firstName}</td>
-                        <td>
-                            <form action="<%= request.getContextPath() %>/studentList" method="post">
-                                <input type="hidden" name="studentId" value="${student.id}">
-                                <button type="submit">Afficher les détails</button>
-                            </form>
-                        </td>
+                        <td>${grade.grade}</td>
+                        <td>${grade.date}</td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
-        </c:if>
-        <c:if test="${empty students}">
-            <p>Aucun étudiant trouvé.</p>
         </c:if>
     </div>
 
