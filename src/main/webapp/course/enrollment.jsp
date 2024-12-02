@@ -2,11 +2,12 @@
 <html>
 <head>
   <title>Inscription à un Cours</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/enrollment.css">
+
   <script>
     const contextPath = "${pageContext.request.contextPath}";
   </script>
-  <script src="${pageContext.request.contextPath}/resources/js/initCourse.js"></script>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/enrollment.css">
+
 </head>
 <body>
 <h1>Inscription à un Cours</h1>
@@ -34,6 +35,6 @@
 <a href="${pageContext.request.contextPath}/home.jsp">
   <button>Revenir à l'accueil</button>
 </a>
-
+<script src="${pageContext.request.contextPath}/resources/js/initCourse.js"></script>
 </body>
 </html>

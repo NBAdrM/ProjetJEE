@@ -48,7 +48,7 @@
             <a href="<%= request.getContextPath() %>/home.jsp">Accueil</a>
 
             <% if ("student".equals(role)) { %>
-            <a href="<%= request.getContextPath() %>/ListInscriptionServlet">Inscriptions Cours</a>
+            <a href="<%= request.getContextPath() %>/enrollment">Inscriptions Cours</a>
             <% } else if ("teacher".equals(role)) { %>
             <a href="<%= request.getContextPath() %>/course/courseServlet.jsp">Création Cours</a>
             <% } %>
