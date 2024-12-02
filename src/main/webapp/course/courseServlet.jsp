@@ -3,23 +3,20 @@
 <head>
     <title>Gestion des Cours</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/courseServlet.css">
-    <script src="${pageContext.request.contextPath}/resources/js/courseServlet.js" defer></script>
 </head>
 <body>
 <h1>Gestion des Cours</h1>
 
-<!-- Panneau pour charger tous les cours -->
 <div class="panel">
-    <h2>Liste des Cours</h2>
+    <h2 class="panel-header">Liste des Cours</h2>
     <div class="panel-content">
         <button id="loadCoursesButton">Charger tous les cours</button>
         <div id="allCoursesList"></div>
     </div>
 </div>
 
-<!-- Panneau pour rechercher un cours par ID -->
 <div class="panel">
-    <h2>Rechercher un cours par ID</h2>
+    <h2 class="panel-header">Rechercher un cours par ID</h2>
     <div class="panel-content">
         <form id="getCourseForm">
             <label for="courseId">ID du Cours:</label>
@@ -30,9 +27,8 @@
     </div>
 </div>
 
-<!-- Panneau pour créer un cours -->
 <div class="panel">
-    <h2>Créer un cours</h2>
+    <h2 class="panel-header">Créer un cours</h2>
     <div class="panel-content">
         <form id="createCourseForm" method="post" action="${pageContext.request.contextPath}/course">
             <label for="courseName">Nom du Cours:</label>
@@ -49,9 +45,12 @@
     </div>
 </div>
 
-<!-- Barre d'erreur -->
-<div class="error-bar" id="errorBar" style="display: none;"></div>
-<a href="${pageContext.request.contextPath}/home.jsp" class="a">Retour</a>
+<div class="error-bar" id="errorBar">Erreur : Aucun cours trouvé.</div>
 
+<div class="back-button-container">
+    <button id="backButton" onclick="goBack()">Retour</button>
+</div>
+
+<script src="${pageContext.request.contextPath}/resources/js/courseServlet.js"></script>
 </body>
 </html>
