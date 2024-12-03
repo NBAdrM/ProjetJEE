@@ -19,6 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enregistrement des Notes</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/courseCalendar.css">
+    <script src="${pageContext.request.contextPath}/resources/js/initCourseByStudent.js "></script>
 </head>
 
 <body>
@@ -40,33 +41,20 @@
     </nav>
 </header>
 
-
 <div class="main-content">
-    <h1>Liste des notes</h1>
+    <h1>Liste des cours</h1>
+    <form action="<%= request.getContextPath() %>/gradeCourseList" method="post">
+        <label for="course">Choisissez le cours dont vous voulez les notes:</label>
+        <select id="course" name="courseId">
+            <c:forEach var="course" items="${courses}">
+                <option value="${course.id}">${course.name} - ${course.year} - ${course.classroom}</option>
+            </c:forEach>
+        </select>
+        <br>
 
-    <div class="grade-results">
-        <c:if test="${not empty grades}">
-            <table border="1">
-                <thead>
-                <tr>
-                    <th>Note</th>
-                    <th>Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="grade" items="${grades}">
-                    <tr>
-                        <td>${grade.getGrade()}</td>
-                        <td>${grade.getDate()}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-            <p>Moyenne : ${average}</p>
-            <label
-        </c:if>
-    </div>
 
+        <button type="submit">Consulter les notes</button>
+    </form>
 </div>
 
 </body>

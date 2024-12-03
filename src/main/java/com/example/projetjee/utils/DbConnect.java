@@ -531,6 +531,37 @@ public class DbConnect {
         return students;
     }
 
+    public static List<Teacher> getTeachersByName(String lastName, String firstName) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Teacher AS t INNER JOIN Person AS p ON t.id=p.id WHERE p.last_name LIKE ? OR p.first_name LIKE ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setString(1, lastName);
+        stmt.setString(2, firstName);
+
+        ResultSet rs = stmt.executeQuery();
+        List<Teacher> teachers = new ArrayList<>();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String firstname = rs.getString("first_name");
+            String lastname = rs.getString("last_name");
+            String email = rs.getString("email");
+            String address = rs.getString("address");
+            String username = rs.getString("username");
+            String password = rs.getString("password");
+            Boolean active = rs.getBoolean("active");
+
+            teachers.add(new Teacher(id, firstname, lastname, email, address, null, null, active));
+        }
+
+        stmt.close();
+        conn.close();
+        return teachers;
+    }
+
     public static List<Course> getCoursesByTeacher(int teacherId) throws SQLException, ClassNotFoundException {
         Connection conn = initializeDatabase();
 
@@ -548,6 +579,32 @@ public class DbConnect {
             String name = rs.getString("name");
             int year = rs.getInt("year");
             int degree = rs.getInt("degree");
+
+            courses.add(new Course(id, name, year, teacherId));
+        }
+
+        stmt.close();
+        conn.close();
+        return courses;
+    }
+
+    public static List<Course> getCoursesByStudent(int studentId) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Course AS c INNER JOIN student_has_course as s_a_c ON s_a_c.course_id = c.id WHERE Student_id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, studentId);
+
+        ResultSet rs = stmt.executeQuery();
+        List<Course> courses = new ArrayList<>();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            int year = rs.getInt("year");
+            int teacherId = rs.getInt("Teacher_Person_id");
 
             courses.add(new Course(id, name, year, teacherId));
         }
@@ -769,4 +826,30 @@ public class DbConnect {
         return studentCourses;
     }
 
+    public static List<DateCourse> getDateCourse(int id) throws SQLException, ClassNotFoundException {
+        Connection conn = initializeDatabase();
+
+        String query = "SELECT * FROM Date_Course WHERE Course_id = ?";
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+        List<DateCourse> dateCourses = new ArrayList<>();
+
+        while (rs.next()) {
+            int idd = rs.getInt("id");
+            String dateString = rs.getString("date");
+            String startTime = rs.getString("start_time");
+            String endTime = rs.getString("end_time");
+            String classroom = rs.getString("classroom");
+            Date date = Date.valueOf(dateString);
+            dateCourses.add(new DateCourse(idd, id, date, classroom, startTime, endTime));
+        }
+
+        stmt.close();
+        conn.close();
+        return dateCourses;
+    }
 }
