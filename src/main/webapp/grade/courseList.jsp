@@ -11,6 +11,7 @@
 //        response.sendRedirect(request.getContextPath() + "/home.jsp");
 //        return;
 //    }
+    String username = (String) session.getAttribute("username");
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -55,6 +56,18 @@
 
         <button type="submit">Consulter les notes</button>
     </form>
+
+    <h1>Télécharger votre bulletin de note</h1>
+    <form action="<%= request.getContextPath() %>/downloadBulletin" method="get">
+        <input type="text" id="studentId" name="studentId" hidden="true" value="<%= username %>">
+
+        <label for="year">Entrez l'année scolaire:</label>
+        <select id="year" name="year">
+            <option value="2024">2024/2025</option>
+        </select>
+        <button type="submit">Télécharger le bulletin</button>
+    </form>
+
 </div>
 
 </body>

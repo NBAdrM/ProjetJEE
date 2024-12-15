@@ -151,5 +151,15 @@
         <url-pattern>/teacherList</url-pattern>
     </servlet-mapping>
 
+    <!-- -->
+    <servlet>
+        <servlet-name>BulletinServlet</servlet-name>
+        <servlet-class>com.example.projetjee.controllers.BulletinServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BulletinServlet</servlet-name>
+        <url-pattern>/downloadBulletin</url-pattern>
+    </servlet-mapping>
 </web-app>
 
