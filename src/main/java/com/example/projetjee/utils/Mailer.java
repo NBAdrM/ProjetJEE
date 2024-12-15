@@ -12,7 +12,7 @@ public class Mailer {
         String host = "smtp.gmail.com";
         String port = "587";
         String username = "jee.projet24@gmail.com";
-        String password = "yrbx bzfq jojv bbcc ";
+        String password = "***";
 
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
